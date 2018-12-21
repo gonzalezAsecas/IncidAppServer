@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="townhalluser", schema="incidapp")
+@XmlRootElement
 public class TownHallUserBean extends PersonBean implements Serializable  {
    @ManyToOne
    private TownHallBean townHall;

@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,6 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name="type", schema="incidapp")
+@XmlRootElement
 public class TypeBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,6 +62,7 @@ public class TypeBean implements Serializable{
         this.Severity = Severity;
     }
 
+    @XmlTransient
     public List<IncidentBean> getIncidents() {
         return incidents;
     }

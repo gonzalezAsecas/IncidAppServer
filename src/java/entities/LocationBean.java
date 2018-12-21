@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -23,6 +25,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name="location", schema="incidapp")
+@XmlRootElement
 public class LocationBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,6 +63,7 @@ public class LocationBean implements Serializable{
         this.townHall = townHall;
     }
 
+    @XmlTransient
     public List<IncidentBean> getIncidents() {
         return incidents;
     }
