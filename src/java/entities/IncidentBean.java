@@ -22,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -146,6 +147,7 @@ public class IncidentBean implements Serializable{
         this.type = type;
     }
 
+    @XmlTransient
     public List<UserBean> getUsers() {
         return users;
     }

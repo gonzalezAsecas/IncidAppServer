@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -65,6 +66,7 @@ public class UserBean extends PersonBean implements Serializable {
         this.townHall = townHall;
     }
 
+    @XmlTransient
     public List<IncidentBean> getIncidents() {
         return incidents;
     }
@@ -73,6 +75,7 @@ public class UserBean extends PersonBean implements Serializable {
         this.incidents = incidents;
     }
 
+    @XmlTransient
     public List<IncidentBean> getSignatureIncidents() {
         return signatureIncidents;
     }
