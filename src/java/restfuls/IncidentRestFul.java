@@ -123,15 +123,15 @@ public class IncidentRestFul{
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    public List<IncidentBean> findAll() {
+    public List<IncidentBean> findAll(IncidentBean incident) {
         List<IncidentBean> incidents = null;
         try {
-            LOGGER.info("IncidentRestFul: Finding all incidents.");
-            incidents = incidentejb.findAllIncidents();
-            LOGGER.info("IncidentRestFul: All incidents found.");
+            LOGGER.info("IncidentRestFul: Finding the incidents by filter.");
+            incidents = incidentejb.findIncidentsbyFilter(incident);
+            LOGGER.info("IncidentRestFul: The filtred incidents found.");
             return incidents;
         } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding all the incidents.", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding the incidents by filter.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
     }

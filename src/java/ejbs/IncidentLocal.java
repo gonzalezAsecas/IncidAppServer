@@ -26,4 +26,6 @@ public interface IncidentLocal {
     public IncidentBean findIncidentbyId(IncidentBean incident) throws ReadException;
 
     public List<IncidentBean> findAllIncidents() throws ReadException;
+    
+    public List<IncidentBean> findIncidentsbyFilter(IncidentBean incident) throws ReadException;
 }

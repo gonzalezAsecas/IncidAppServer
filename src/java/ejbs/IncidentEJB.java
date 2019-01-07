@@ -130,4 +130,21 @@ public class IncidentEJB implements IncidentLocal {
             throw new ReadException(e.getMessage());
         }
     }
+
+    @Override
+    public List<IncidentBean> findIncidentsbyFilter(IncidentBean incident) throws ReadException {
+        List<IncidentBean> incidents = null;
+        try{
+            LOGGER.info("IncidentEJB: Finding the incidents filtred.");
+            incidents = em.createNamedQuery("finsIncidentsbyFilter")
+                    .setParameter("title", incident.getTitle())
+                    .setParameter("type", incident.getType())
+                    .setParameter("estate", incident.getEstate()).getResultList();
+            LOGGER.info("IncidentEJB: Incidents found.");
+            return incidents;
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "IncidentEJB: Exception finding the incidents by filter.", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+    }
 }

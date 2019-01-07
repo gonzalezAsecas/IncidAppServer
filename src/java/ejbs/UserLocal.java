@@ -26,4 +26,8 @@ public interface UserLocal {
     public UserBean findUserbyId(UserBean user) throws ReadException;
 
     public List<UserBean> findAllUsers() throws ReadException;
+    
+    public UserBean findUserbyLogin(UserBean user) throws ReadException;
+    
+    public void findUserToChangePassword(UserBean user) throws ReadException;
 }

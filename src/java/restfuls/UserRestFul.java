@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Usuario
+ * @author Jon Gonzalez
  */
 @Stateless
 @Path("entities.user")
@@ -135,6 +135,39 @@ public class UserRestFul {
             return users;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the users.", ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    @GET
+    @Path("{Login}")
+    @Produces({MediaType.APPLICATION_XML})
+    public UserBean findUserbyLogin(UserBean user) {
+        try {
+            LOGGER.info("UserRestFul: Finding user by login.");
+            user = userejb.findUserbyLogin(user);
+            LOGGER.info("UserRestFul: User found by login.");
+            return user;
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
+    
+    @GET
+    @Path("password/{Login}")
+    @Produces({MediaType.APPLICATION_XML})
+    public void findUserToChangePassword(UserBean user){
+        try{
+            LOGGER.info("UserRestFul: Finding user by login to change the password.");
+            userejb.findUserToChangePassword(user);
+            LOGGER.info("UserRestFul: User found.");
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
     }

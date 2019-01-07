@@ -36,8 +36,6 @@ public class TownHallBean implements Serializable{
     @OneToMany(mappedBy="townHall")
     private List<LocationBean> locations;
     @OneToMany(mappedBy="townHall")
-    private List<TownHallUserBean> townhallusers;
-    @OneToMany(mappedBy="townHall")
     private List<UserBean> users;
 
     public TownHallBean(){}
@@ -84,15 +82,6 @@ public class TownHallBean implements Serializable{
     }
 
     @XmlTransient
-    public List<TownHallUserBean> getTownhallusers() {
-        return townhallusers;
-    }
-
-    public void setTownhallusers(List<TownHallUserBean> townhallusers) {
-        this.townhallusers = townhallusers;
-    }
-
-    @XmlTransient
     public List<UserBean> getUsers() {
         return users;
     }
@@ -109,7 +98,6 @@ public class TownHallBean implements Serializable{
         hash = 47 * hash + Objects.hashCode(this.email);
         hash = 47 * hash + Objects.hashCode(this.telephoneNumber);
         hash = 47 * hash + Objects.hashCode(this.locations);
-        hash = 47 * hash + Objects.hashCode(this.townhallusers);
         hash = 47 * hash + Objects.hashCode(this.users);
         return hash;
     }
@@ -141,9 +129,6 @@ public class TownHallBean implements Serializable{
         if (!Objects.equals(this.locations, other.locations)) {
             return false;
         }
-        if (!Objects.equals(this.townhallusers, other.townhallusers)) {
-            return false;
-        }
         if (!Objects.equals(this.users, other.users)) {
             return false;
         }
@@ -152,6 +137,6 @@ public class TownHallBean implements Serializable{
 
     @Override
     public String toString() {
-        return "TownHallBean{" + "idTownHall=" + idTownHall + ", locality=" + locality + ", email=" + email + ", telephoneNumber=" + telephoneNumber + ", locations=" + locations + ", townhallusers=" + townhallusers + ", users=" + users + '}';
+        return "TownHallBean{" + "idTownHall=" + idTownHall + ", locality=" + locality + ", email=" + email + ", telephoneNumber=" + telephoneNumber + ", locations=" + locations + ", users=" + users + '}';
     }
 }
