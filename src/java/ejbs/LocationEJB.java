@@ -42,7 +42,7 @@ public class LocationEJB implements LocationLocal{
      * @throws CreateException 
      */
     @Override
-    public LocationBean createLocation(LocationBean location) throws CreateException {
+    public void createLocation(LocationBean location) throws CreateException {
         try{
             LOGGER.info("LocationEJB: Adding a location.");
             em.persist(location);
@@ -51,8 +51,7 @@ public class LocationEJB implements LocationLocal{
             LOGGER.log(Level.SEVERE,
                     "LocationEJB: Exception adding the location.", e.getMessage());
             throw new CreateException(e.getMessage());
-}
-        return location;
+        }
     }
     
     /**

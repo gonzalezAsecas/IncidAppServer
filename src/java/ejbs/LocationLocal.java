@@ -17,7 +17,7 @@ import java.util.List;
  * @author Jon Gonzalez
  */
 public interface LocationLocal {
-    public LocationBean createLocation(LocationBean location) throws CreateException;
+    public void createLocation(LocationBean location) throws CreateException;
 
     public void editLocation(LocationBean location) throws UpdateException;
 
