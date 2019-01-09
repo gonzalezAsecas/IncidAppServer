@@ -48,6 +48,7 @@ public class IncidentRestFul{
      * @param incident 
      */
     @POST
+    @Path("/create")
     @Consumes({MediaType.APPLICATION_XML})
     public void create(IncidentBean incident) {
         try {
@@ -65,7 +66,7 @@ public class IncidentRestFul{
      * @param incident 
      */
     @PUT
-    @Path("{id}")
+    @Path("/edit/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(IncidentBean incident) {
         try {
@@ -83,7 +84,7 @@ public class IncidentRestFul{
      * @param incident 
      */
     @DELETE
-    @Path("{id}")
+    @Path("/rmv/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void remove(IncidentBean incident) {
         try {
@@ -102,7 +103,7 @@ public class IncidentRestFul{
      * @return 
      */
     @GET
-    @Path("{id}")
+    @Path("/find/{id}")
     @Produces({MediaType.APPLICATION_XML})
     public IncidentBean find(IncidentBean incident) {
         IncidentBean incid = null;
@@ -122,6 +123,7 @@ public class IncidentRestFul{
      * @return 
      */
     @GET
+    @Path("/findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<IncidentBean> findAll(IncidentBean incident) {
         List<IncidentBean> incidents = null;

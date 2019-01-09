@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jon Gonzalez
  */
-@MappedSuperclass
+@Entity
 @Table(name="person", schema="incidapp")
 public class UserBean implements Serializable {
 

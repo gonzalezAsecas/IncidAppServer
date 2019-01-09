@@ -51,6 +51,7 @@ public class UserRestFul {
      * @param user 
      */
     @POST
+    @Path("/create")
     @Consumes({MediaType.APPLICATION_XML})
     public void create(UserBean user) {
         try {
@@ -68,7 +69,7 @@ public class UserRestFul {
      * @param user 
      */
     @PUT
-    @Path("{id}")
+    @Path("/edit/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(UserBean user) {
         try {
@@ -86,7 +87,7 @@ public class UserRestFul {
      * @param user 
      */
     @DELETE
-    @Path("{id}")
+    @Path("/rmv/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void remove(UserBean user) {
         try {
@@ -105,7 +106,7 @@ public class UserRestFul {
      * @return 
      */
     @GET
-    @Path("{id}")
+    @Path("/find/{id}")
     @Produces({MediaType.APPLICATION_XML})
     public UserBean find(UserBean user) {
         UserBean us = null;
@@ -125,6 +126,7 @@ public class UserRestFul {
      * @return 
      */
     @GET
+    @Path("/findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<UserBean> findAll() {
         List<UserBean> users = null;
@@ -144,7 +146,7 @@ public class UserRestFul {
      * @return 
      */
     @GET
-    @Path("{Login}")
+    @Path("/find/{login}")
     @Produces({MediaType.APPLICATION_XML})
     public UserBean findUserbyLogin(UserBean user) {
         try {
@@ -159,7 +161,7 @@ public class UserRestFul {
     }
     
     @GET
-    @Path("password/{Login}")
+    @Path("/chgpass/{Login}")
     @Produces({MediaType.APPLICATION_XML})
     public void findUserToChangePassword(UserBean user){
         try{

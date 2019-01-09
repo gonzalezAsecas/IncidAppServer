@@ -21,9 +21,9 @@ public interface TownHallLocal {
 
     public void editTownHall(TownHallBean townhall) throws UpdateException;
 
-    public void removeTownHall(TownHallBean townhall) throws DeleteException;
+    public void removeTownHall(Integer id) throws DeleteException;
 
-    public TownHallBean findTownHallbyId(TownHallBean townhall) throws ReadException;
+    public TownHallBean findTownHallbyId(Integer id) throws ReadException;
 
     public List<TownHallBean> findAllTownHalls() throws ReadException;
 }

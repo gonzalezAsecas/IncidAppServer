@@ -43,6 +43,7 @@ public class TypeRestFul{
      * @return 
      */
     @GET
+    @Path("/findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<TypeBean> findAll() {
         List<TypeBean> types = null;

@@ -103,7 +103,7 @@ public class LocationEJB implements LocationLocal{
         LocationBean loc = null;
         try{
             LOGGER.info("LocationEJB: Finding a location by id.");
-            loc = em.find(LocationBean.class, location.getIdLocation());
+            loc = em.find(LocationBean.class, location.getId());
             LOGGER.info("LocationEJB: Location found by id.");
             return loc;
         }catch(Exception e){

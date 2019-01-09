@@ -49,6 +49,7 @@ public class LocationRestFul{
      * @param location 
      */
     @POST
+    @Path("/create")
     @Consumes({MediaType.APPLICATION_XML})
     public void create(LocationBean location) {
         try {
@@ -66,7 +67,7 @@ public class LocationRestFul{
      * @param location 
      */
     @PUT
-    @Path("{id}")
+    @Path("/edit/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(LocationBean location) {
         try {
@@ -84,7 +85,7 @@ public class LocationRestFul{
      * @param location 
      */
     @DELETE
-    @Path("{id}")
+    @Path("/rmv/{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void remove(LocationBean location) {
         try {
@@ -103,7 +104,7 @@ public class LocationRestFul{
      * @return 
      */
     @GET
-    @Path("{id}")
+    @Path("/find/{id}")
     @Produces({MediaType.APPLICATION_XML})
     public LocationBean find(LocationBean location) {
         LocationBean loc = null;
@@ -123,6 +124,7 @@ public class LocationRestFul{
      * @return 
      */
     @GET
+    @Path("/findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<LocationBean> findAll() {
         List<LocationBean> locations = null;

@@ -80,10 +80,10 @@ public class TownHallEJB implements TownHallLocal{
      * @throws DeleteException 
      */
     @Override
-    public void removeTownHall(TownHallBean townhall) throws DeleteException {
+    public void removeTownHall(Integer id) throws DeleteException {
         try{
             LOGGER.info("TownHallEJB: Removing a town hall.");
-            em.remove(em.merge(townhall));
+            em.remove(em.merge(id));
             LOGGER.info("TownHallEJB: Town hall removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -99,11 +99,11 @@ public class TownHallEJB implements TownHallLocal{
      * @throws ReadException 
      */
     @Override
-    public TownHallBean findTownHallbyId(TownHallBean townhall) throws ReadException {
+    public TownHallBean findTownHallbyId(Integer id) throws ReadException {
         TownHallBean townHall = null;
         try{
             LOGGER.info("TownHallEJB: Finding a town hall by id.");
-            townHall = em.find(TownHallBean.class, townhall.getIdTownHall());
+            townHall = em.find(TownHallBean.class, id);
             LOGGER.info("TownHallEJB: Town hall found by id.");
             return townHall;
         }catch(Exception e){

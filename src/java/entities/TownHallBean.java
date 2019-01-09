@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class TownHallBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idTownHall;
+    private Integer id;
     @NotNull
     private String locality;
     private String email;
@@ -40,12 +40,12 @@ public class TownHallBean implements Serializable{
 
     public TownHallBean(){}
 
-    public Integer getIdTownHall() {
-        return idTownHall;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdTownHall(Integer idTownHall) {
-        this.idTownHall = idTownHall;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getLocality() {
@@ -93,7 +93,7 @@ public class TownHallBean implements Serializable{
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.idTownHall);
+        hash = 47 * hash + Objects.hashCode(this.id);
         hash = 47 * hash + Objects.hashCode(this.locality);
         hash = 47 * hash + Objects.hashCode(this.email);
         hash = 47 * hash + Objects.hashCode(this.telephoneNumber);
@@ -123,7 +123,7 @@ public class TownHallBean implements Serializable{
         if (!Objects.equals(this.telephoneNumber, other.telephoneNumber)) {
             return false;
         }
-        if (!Objects.equals(this.idTownHall, other.idTownHall)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.locations, other.locations)) {
@@ -137,6 +137,6 @@ public class TownHallBean implements Serializable{
 
     @Override
     public String toString() {
-        return "TownHallBean{" + "idTownHall=" + idTownHall + ", locality=" + locality + ", email=" + email + ", telephoneNumber=" + telephoneNumber + ", locations=" + locations + ", users=" + users + '}';
+        return "TownHallBean{" + "idTownHall=" + id + ", locality=" + locality + ", email=" + email + ", telephoneNumber=" + telephoneNumber + ", locations=" + locations + ", users=" + users + '}';
     }
 }
