@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(restfuls.LocationRestFul.class);
         resources.add(restfuls.TownHallRestFul.class);
         resources.add(restfuls.TypeRestFul.class);
+        resources.add(restfuls.UserRestFul.class);
     }
     
 }
