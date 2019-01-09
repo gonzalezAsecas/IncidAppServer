@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class IncidentBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idIncident;
+    private Integer id;
     @NotNull
     private String title;
     private byte[] photo;
@@ -59,12 +59,12 @@ public class IncidentBean implements Serializable{
     
     public IncidentBean(){}
 
-    public Integer getIdIncident() {
-        return idIncident;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdIncident(Integer idIncident) {
-        this.idIncident = idIncident;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -159,7 +159,7 @@ public class IncidentBean implements Serializable{
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 11 * hash + Objects.hashCode(this.idIncident);
+        hash = 11 * hash + Objects.hashCode(this.id);
         hash = 11 * hash + Objects.hashCode(this.title);
         hash = 11 * hash + Arrays.hashCode(this.photo);
         hash = 11 * hash + Objects.hashCode(this.description);
@@ -195,7 +195,7 @@ public class IncidentBean implements Serializable{
         if (!Objects.equals(this.comment, other.comment)) {
             return false;
         }
-        if (!Objects.equals(this.idIncident, other.idIncident)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Arrays.equals(this.photo, other.photo)) {
@@ -227,6 +227,6 @@ public class IncidentBean implements Serializable{
 
     @Override
     public String toString() {
-        return "IncidentBean{" + "idIncident=" + idIncident + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
+        return "IncidentBean{" + "idIncident=" + id + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
     }
 }

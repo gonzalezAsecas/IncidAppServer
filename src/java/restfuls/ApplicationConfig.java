@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(restfuls.LocationRestFul.class);
+        resources.add(restfuls.TownHallRestFul.class);
         resources.add(restfuls.TypeRestFul.class);
     }
     

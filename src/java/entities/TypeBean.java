@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class TypeBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idType;
+    private Integer id;
     @NotNull
     private String name;
     @NotNull
@@ -41,12 +41,12 @@ public class TypeBean implements Serializable{
 
     public TypeBean(){}
 
-    public Integer getIdType() {
-        return idType;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdType(Integer idType) {
-        this.idType = idType;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -77,7 +77,7 @@ public class TypeBean implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.idType);
+        hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.name);
         hash = 67 * hash + Objects.hashCode(this.Severity);
         hash = 67 * hash + Objects.hashCode(this.incidents);
@@ -99,7 +99,7 @@ public class TypeBean implements Serializable{
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.idType, other.idType)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.Severity, other.Severity)) {
@@ -113,6 +113,6 @@ public class TypeBean implements Serializable{
 
     @Override
     public String toString() {
-        return "TypeBean{" + "idType=" + idType + ", name=" + name + ", Severity=" + Severity + ", incidents=" + incidents + '}';
+        return "TypeBean{" + "idType=" + id + ", name=" + name + ", Severity=" + Severity + ", incidents=" + incidents + '}';
     }
 }
