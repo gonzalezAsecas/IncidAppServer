@@ -35,7 +35,7 @@ public class TownHallBean implements Serializable{
     private String telephoneNumber;
     @OneToMany(mappedBy="townHall")
     private List<LocationBean> locations;
-    @OneToMany(mappedBy="townHall")
+    @OneToMany(mappedBy="th")
     private List<UserBean> users;
 
     public TownHallBean(){}

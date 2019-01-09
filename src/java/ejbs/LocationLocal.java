@@ -21,9 +21,9 @@ public interface LocationLocal {
 
     public void editLocation(LocationBean location) throws UpdateException;
 
-    public void removeLocation(LocationBean location) throws DeleteException;
+    public void removeLocation(Integer id) throws DeleteException;
 
-    public LocationBean findLocationbyId(LocationBean location) throws ReadException;
+    public LocationBean findLocationbyId(Integer id) throws ReadException;
 
     public List<LocationBean> findAllLocations() throws ReadException;
 }

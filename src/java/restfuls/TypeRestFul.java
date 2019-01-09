@@ -21,10 +21,9 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Usuario
+ * @author Jon Gonzalez
  */
-@Stateless
-@Path("entities.typebean")
+@Path("type")
 public class TypeRestFul{
 
     /**
@@ -43,9 +42,9 @@ public class TypeRestFul{
      * @return 
      */
     @GET
-    @Path("/findAll")
+    @Path("types")
     @Produces({MediaType.APPLICATION_XML})
-    public List<TypeBean> findAll() {
+    public List<TypeBean> findAllTypes() {
         List<TypeBean> types = null;
         try {
             LOGGER.info("TypeRestFul: Finding all types.");
