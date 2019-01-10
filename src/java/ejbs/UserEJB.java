@@ -76,14 +76,14 @@ public class UserEJB implements UserLocal{
     
     /**
      * 
-     * @param id
+     * @param user
      * @throws DeleteException 
      */
     @Override
-    public void removeUser(Integer id) throws DeleteException {
+    public void removeUser(UserBean user) throws DeleteException {
         try{
             LOGGER.info("UserEJB: Removing a user.");
-            em.remove(em.merge(id));
+            em.remove(em.merge(user));
             LOGGER.info("UserEJB: User removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -122,7 +122,7 @@ public class UserEJB implements UserLocal{
         List<UserBean> users = null;
         try{
             LOGGER.info("UserEJB: Finding all the users.");
-            users = em.createNamedQuery("finsAllUsers").getResultList();
+            users = em.createNamedQuery("findAllUsers").getResultList();
             LOGGER.info("UserEJB: Users found.");
             return users;
         }catch(Exception e){
@@ -154,15 +154,22 @@ public class UserEJB implements UserLocal{
             throw new ReadException(e.getMessage(), cause);
         }
     }
-
+    
+    /**
+     * 
+     * @param login
+     * @throws ReadException 
+     */
     @Override
-    public void findUserToChangePassword(UserBean user) throws ReadException {
-        UserBean us;
+    public void findUserToChangePassword(String login) throws ReadException {
+        UserBean us = new UserBean();
         try{
             LOGGER.info("UserEJB: Finding user by login for change the password");
-            us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", user.getLogin()).getSingleResult();
+            us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", login).getSingleResult();
             LOGGER.info("UserEJB: User found");
-            //TODO cambio contraseña
+            if(us != null){
+                //TODO cambio contraseña
+            }
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
             throw new ReadException(e.getMessage());

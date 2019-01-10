@@ -6,7 +6,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -17,9 +17,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -31,8 +33,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="user", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="finAllUsers", 
-            query="SELECT s FROM UserBean s")
+@NamedQueries({@NamedQuery(
+                name="findAllUsers", 
+                query="SELECT s FROM UserBean s"),
+              @NamedQuery(
+                name="findUserbyLogin", 
+                query="SELECT s FROM UserBean s WHERE s.login = :login")
+})
 public class UserBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,9 +60,11 @@ public class UserBean implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private Privilege privilege;
     @NotNull
-    private Timestamp lastAccess;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date lastAccess;
     @NotNull
-    private Timestamp lastPasswordChange;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date lastPasswordChange;
     private String dni;
     private String street;
     @ManyToOne
@@ -118,19 +127,19 @@ public class UserBean implements Serializable {
         this.privilege = privilege;
     }
 
-    public Timestamp getLastAccess() {
+    public Date getLastAccess() {
         return lastAccess;
     }
 
-    public void setLastAccess(Timestamp lastAccess) {
+    public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
     }
 
-    public Timestamp getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
-    public void setLastPasswordChange(Timestamp lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 

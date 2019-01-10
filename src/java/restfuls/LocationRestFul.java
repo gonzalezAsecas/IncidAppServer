@@ -85,13 +85,12 @@ public class LocationRestFul{
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("LocationRestFul: Removing a location.");
-            locationejb.removeLocation(id);
+            locationejb.removeLocation(locationejb.findLocationbyId(id));
             LOGGER.info("LocationRestFul: Location removed.");
-        } catch (DeleteException ex) {
+        } catch (DeleteException | ReadException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception removing the location.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -99,7 +98,7 @@ public class LocationRestFul{
     
     /**
      * 
-     * @param location
+     * @param id
      * @return 
      */
     @GET
@@ -123,7 +122,6 @@ public class LocationRestFul{
      * @return 
      */
     @GET
-    @Path("findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<LocationBean> findAll() {
         List<LocationBean> locations = null;

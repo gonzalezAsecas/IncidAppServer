@@ -46,8 +46,8 @@ public class LocationBean implements Serializable{
         return id;
     }
 
-    public void setIdLocation(Integer idLocation) {
-        this.id = idLocation;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getStreet() {
@@ -114,6 +114,6 @@ public class LocationBean implements Serializable{
 
     @Override
     public String toString() {
-        return "LocationBean{" + "idLocation=" + id + ", street=" + street + ", townHall=" + townHall + ", incidents=" + incidents + '}';
+        return "LocationBean{" + "id=" + id + ", street=" + street + ", townHall=" + townHall + ", incidents=" + incidents + '}';
     }
 }

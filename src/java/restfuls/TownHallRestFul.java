@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Path("entities.townhallbean")
+@Path("townhallbean")
 public class TownHallRestFul{
 
     /**
@@ -85,13 +85,12 @@ public class TownHallRestFul{
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("TownHallRestFul: Removing a town hall.");
-            townhallejb.removeTownHall(id);
+            townhallejb.removeTownHall(townhallejb.findTownHallbyId(id));
             LOGGER.info("TownHallRestFul: Town hall removed.");
-        } catch (DeleteException ex) {
+        } catch (DeleteException | ReadException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception removing the town hall.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }

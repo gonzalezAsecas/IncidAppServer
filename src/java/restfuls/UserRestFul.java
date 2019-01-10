@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Path("entities.user")
+@Path("user")
 public class UserRestFul {
 
     /**
@@ -82,17 +81,16 @@ public class UserRestFul {
     
     /**
      * 
-     * @param user 
+     * @param id
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("UserRestFul: Removing a user.");
-            userejb.removeUser(id);
+            userejb.removeUser(userejb.findUserbyId(id));
             LOGGER.info("UserRestFul: User removed.");
-        } catch (DeleteException ex) {
+        } catch (DeleteException | ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception removing the user.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -137,15 +135,17 @@ public class UserRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-    //preguntar mañana lo de la contraseña
     /**
      * 
      * @return 
      */
     @GET
-    @Path("{Login}")
+    @Path("{login}/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(UserBean user) {
+    public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
+        UserBean user= new UserBean();
+        user.setLogin(login);
+        user.setPassword(password);
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
             user = userejb.findUserbyLogin(user);
@@ -158,12 +158,12 @@ public class UserRestFul {
     }
     
     @GET
-    @Path("password/{Login}")
+    @Path("passwordChange/{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public void findUserToChangePassword(UserBean user){
+    public void findUserToChangePassword(@PathParam("login")String login){
         try{
             LOGGER.info("UserRestFul: Finding user by login to change the password.");
-            userejb.findUserToChangePassword(user);
+            userejb.findUserToChangePassword(login);
             LOGGER.info("UserRestFul: User found.");
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());

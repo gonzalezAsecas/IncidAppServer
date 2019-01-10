@@ -42,7 +42,7 @@ public class TypeEJB implements TypeLocal{
         List<TypeBean> types = null;
         try{
             LOGGER.info("TypeEJB: Finding all the types.");
-            types = em.createNamedQuery("finsAllTypes").getResultList();
+            types = em.createNamedQuery("findAllTypes").getResultList();
             LOGGER.info("TypeEJB: Types found.");
             return types;
         }catch(Exception e){
