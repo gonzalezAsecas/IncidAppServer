@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class IncidentBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idIncident;
+    private Integer id;
     @NotNull
     private String title;
     private byte[] photo;
@@ -59,12 +59,12 @@ public class IncidentBean implements Serializable{
     
     public IncidentBean(){}
 
-    public Integer getIdIncident() {
-        return idIncident;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdIncident(Integer idIncident) {
-        this.idIncident = idIncident;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -158,19 +158,19 @@ public class IncidentBean implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 11 * hash + Objects.hashCode(this.idIncident);
-        hash = 11 * hash + Objects.hashCode(this.title);
-        hash = 11 * hash + Arrays.hashCode(this.photo);
-        hash = 11 * hash + Objects.hashCode(this.description);
-        hash = 11 * hash + Objects.hashCode(this.comment);
-        hash = 11 * hash + Objects.hashCode(this.createDate);
-        hash = 11 * hash + Objects.hashCode(this.endDate);
-        hash = 11 * hash + Objects.hashCode(this.estate);
-        hash = 11 * hash + Objects.hashCode(this.user);
-        hash = 11 * hash + Objects.hashCode(this.location);
-        hash = 11 * hash + Objects.hashCode(this.type);
-        hash = 11 * hash + Objects.hashCode(this.users);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.title);
+        hash = 17 * hash + Arrays.hashCode(this.photo);
+        hash = 17 * hash + Objects.hashCode(this.description);
+        hash = 17 * hash + Objects.hashCode(this.comment);
+        hash = 17 * hash + Objects.hashCode(this.createDate);
+        hash = 17 * hash + Objects.hashCode(this.endDate);
+        hash = 17 * hash + Objects.hashCode(this.estate);
+        hash = 17 * hash + Objects.hashCode(this.user);
+        hash = 17 * hash + Objects.hashCode(this.location);
+        hash = 17 * hash + Objects.hashCode(this.type);
+        hash = 17 * hash + Objects.hashCode(this.users);
         return hash;
     }
 
@@ -195,7 +195,7 @@ public class IncidentBean implements Serializable{
         if (!Objects.equals(this.comment, other.comment)) {
             return false;
         }
-        if (!Objects.equals(this.idIncident, other.idIncident)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Arrays.equals(this.photo, other.photo)) {
@@ -227,6 +227,6 @@ public class IncidentBean implements Serializable{
 
     @Override
     public String toString() {
-        return "IncidentBean{" + "idIncident=" + idIncident + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
+        return "IncidentBean{" + "id=" + id + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
     }
 }
