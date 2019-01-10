@@ -6,8 +6,8 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -19,18 +19,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Entity
 @Table(name="incident", schema="incidapp")
 @XmlRootElement
+@NamedQuery(name="findAllIncidents",
+    query="SELECT s FROM IncidentBean s")
 public class IncidentBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,8 +46,10 @@ public class IncidentBean implements Serializable{
     private String description;
     private String comment;
     @NotNull
-    private Timestamp createDate;
-    private Timestamp endDate;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date createDate;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date endDate;
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     private Estate estate;
@@ -99,19 +105,19 @@ public class IncidentBean implements Serializable{
         this.comment = comment;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public Timestamp getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

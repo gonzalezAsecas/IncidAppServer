@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,6 +26,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="townhall", schema="incidapp")
 @XmlRootElement
+@NamedQuery(name="finAllTownHalls", 
+            query="SELECT s FROM TownHallBean s")
 public class TownHallBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +38,7 @@ public class TownHallBean implements Serializable{
     private String telephoneNumber;
     @OneToMany(mappedBy="townHall")
     private List<LocationBean> locations;
-    @OneToMany(mappedBy="townHall")
+    @OneToMany(mappedBy="th")
     private List<UserBean> users;
 
     public TownHallBean(){}

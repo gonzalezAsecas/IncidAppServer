@@ -6,9 +6,10 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -16,24 +17,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Jon Gonzalez
  */
-@MappedSuperclass
-@Table(name="person", schema="incidapp")
+@Entity
+@Table(name="user", schema="incidapp")
+@XmlRootElement
+@NamedQuery(name="finAllUsers", 
+            query="SELECT s FROM UserBean s")
 public class UserBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idPerson;
+    private Integer id;
     @NotNull
     private String login;
     @NotNull
@@ -48,13 +54,15 @@ public class UserBean implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private Privilege privilege;
     @NotNull
-    private Timestamp lastAccess;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date lastAccess;
     @NotNull
-    private Timestamp lastPasswordChange;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date lastPasswordChange;
     private String dni;
     private String street;
     @ManyToOne
-    private TownHallBean townHall;
+    private TownHallBean th;
     @OneToMany(mappedBy="user")
     private List<IncidentBean> incidents;
     @ManyToMany(mappedBy="users")
@@ -113,28 +121,28 @@ public class UserBean implements Serializable {
         this.privilege = privilege;
     }
 
-    public Timestamp getLastAccess() {
+    public Date getLastAccess() {
         return lastAccess;
     }
 
-    public void setLastAccess(Timestamp lastAccess) {
+    public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
     }
 
-    public Timestamp getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
-    public void setLastPasswordChange(Timestamp lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
-    public Integer getIdPerson() {
-        return idPerson;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPerson(Integer idPerson) {
-        this.idPerson = idPerson;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public UserBean() {
@@ -156,12 +164,12 @@ public class UserBean implements Serializable {
         this.street = street;
     }
 
-    public TownHallBean getTownHall() {
-        return townHall;
+    public TownHallBean getTH() {
+        return th;
     }
 
-    public void setTownHall(TownHallBean townHall) {
-        this.townHall = townHall;
+    public void setTH(TownHallBean th) {
+        this.th = th;
     }
 
     @XmlTransient
@@ -185,7 +193,7 @@ public class UserBean implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.idPerson);
+        hash = 37 * hash + Objects.hashCode(this.id);
         hash = 37 * hash + Objects.hashCode(this.login);
         hash = 37 * hash + Objects.hashCode(this.email);
         hash = 37 * hash + Objects.hashCode(this.password);
@@ -196,7 +204,7 @@ public class UserBean implements Serializable {
         hash = 37 * hash + Objects.hashCode(this.lastPasswordChange);
         hash = 37 * hash + Objects.hashCode(this.dni);
         hash = 37 * hash + Objects.hashCode(this.street);
-        hash = 37 * hash + Objects.hashCode(this.townHall);
+        hash = 37 * hash + Objects.hashCode(this.th);
         hash = 37 * hash + Objects.hashCode(this.incidents);
         hash = 37 * hash + Objects.hashCode(this.signatureIncidents);
         return hash;
@@ -232,7 +240,7 @@ public class UserBean implements Serializable {
         if (!Objects.equals(this.street, other.street)) {
             return false;
         }
-        if (!Objects.equals(this.idPerson, other.idPerson)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (this.status != other.status) {
@@ -247,7 +255,7 @@ public class UserBean implements Serializable {
         if (!Objects.equals(this.lastPasswordChange, other.lastPasswordChange)) {
             return false;
         }
-        if (!Objects.equals(this.townHall, other.townHall)) {
+        if (!Objects.equals(this.th, other.th)) {
             return false;
         }
         if (!Objects.equals(this.incidents, other.incidents)) {
@@ -261,6 +269,6 @@ public class UserBean implements Serializable {
 
     @Override
     public String toString() {
-        return "PersonBean{" + "idPerson=" + idPerson + ", login=" + login + ", email=" + email + ", password=" + password + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", lastAccess=" + lastAccess + ", lastPasswordChange=" + lastPasswordChange + ", dni=" + dni + ", street=" + street + ", townHall=" + townHall + ", incidents=" + incidents + ", signatureIncidents=" + signatureIncidents + '}';
+        return "PersonBean{" + "idPerson=" + id + ", login=" + login + ", email=" + email + ", password=" + password + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", lastAccess=" + lastAccess + ", lastPasswordChange=" + lastPasswordChange + ", dni=" + dni + ", street=" + street + ", townHall=" + th + ", incidents=" + incidents + ", signatureIncidents=" + signatureIncidents + '}';
     }
 }

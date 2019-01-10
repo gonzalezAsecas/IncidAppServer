@@ -23,6 +23,7 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -30,7 +31,6 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Stateless
 @Path("entities.user")
 public class UserRestFul {
 
@@ -68,7 +68,6 @@ public class UserRestFul {
      * @param user 
      */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(UserBean user) {
         try {
@@ -88,10 +87,10 @@ public class UserRestFul {
     @DELETE
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void remove(UserBean user) {
+    public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("UserRestFul: Removing a user.");
-            userejb.removeUser(user);
+            userejb.removeUser(id);
             LOGGER.info("UserRestFul: User removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception removing the user.", ex.getMessage());
@@ -107,11 +106,11 @@ public class UserRestFul {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    public UserBean find(UserBean user) {
+    public UserBean find(@PathParam("id") Integer id) {
         UserBean us = null;
         try {
             LOGGER.info("UserRestFul: Finding a user by id.");
-            us = userejb.findUserbyId(user);
+            us = userejb.findUserbyId(id);
             LOGGER.info("UserRestFul: User found by id.");
             return us;
         } catch (ReadException ex) {
@@ -138,7 +137,7 @@ public class UserRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-    
+    //preguntar mañana lo de la contraseña
     /**
      * 
      * @return 

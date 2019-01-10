@@ -14,18 +14,16 @@ import java.util.List;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 public interface IncidentLocal {
-    public IncidentBean createIncident(IncidentBean incident) throws CreateException;
+    public void createIncident(IncidentBean incident) throws CreateException;
 
     public void editIncident(IncidentBean incident) throws UpdateException;
 
     public void removeIncident(IncidentBean incident) throws DeleteException;
 
-    public IncidentBean findIncidentbyId(IncidentBean incident) throws ReadException;
+    public IncidentBean findIncidentbyId(Integer id) throws ReadException;
 
     public List<IncidentBean> findAllIncidents() throws ReadException;
-    
-    public List<IncidentBean> findIncidentsbyFilter(IncidentBean incident) throws ReadException;
 }

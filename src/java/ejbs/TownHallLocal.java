@@ -17,13 +17,13 @@ import java.util.List;
  * @author Jon Gonzalez
  */
 public interface TownHallLocal {
-    public TownHallBean createTownHall(TownHallBean townhall) throws CreateException;
+    public void createTownHall(TownHallBean townhall) throws CreateException;
 
     public void editTownHall(TownHallBean townhall) throws UpdateException;
 
-    public void removeTownHall(TownHallBean townhall) throws DeleteException;
+    public void removeTownHall(Integer id) throws DeleteException;
 
-    public TownHallBean findTownHallbyId(TownHallBean townhall) throws ReadException;
+    public TownHallBean findTownHallbyId(Integer id) throws ReadException;
 
     public List<TownHallBean> findAllTownHalls() throws ReadException;
 }

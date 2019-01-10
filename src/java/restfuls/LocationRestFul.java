@@ -22,6 +22,7 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -29,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Path("entities.locationbean")
+@Path("location")
 public class LocationRestFul{
 
     /**
@@ -66,7 +67,6 @@ public class LocationRestFul{
      * @param location 
      */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(LocationBean location) {
         try {
@@ -86,10 +86,10 @@ public class LocationRestFul{
     @DELETE
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void remove(LocationBean location) {
+    public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("LocationRestFul: Removing a location.");
-            locationejb.removeLocation(location);
+            locationejb.removeLocation(id);
             LOGGER.info("LocationRestFul: Location removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception removing the location.", ex.getMessage());
@@ -105,11 +105,11 @@ public class LocationRestFul{
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    public LocationBean find(LocationBean location) {
+    public LocationBean find(@PathParam("id") Integer id) {
         LocationBean loc = null;
         try {
             LOGGER.info("LocationRestFul: Finding a location by id.");
-            loc = locationejb.findLocationbyId(location);
+            loc = locationejb.findLocationbyId(id);
             LOGGER.info("LocationRestFul: Location found by id.");
             return loc;
         } catch (ReadException ex) {
@@ -123,6 +123,7 @@ public class LocationRestFul{
      * @return 
      */
     @GET
+    @Path("findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<LocationBean> findAll() {
         List<LocationBean> locations = null;

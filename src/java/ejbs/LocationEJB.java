@@ -42,7 +42,7 @@ public class LocationEJB implements LocationLocal{
      * @throws CreateException 
      */
     @Override
-    public LocationBean createLocation(LocationBean location) throws CreateException {
+    public void createLocation(LocationBean location) throws CreateException {
         try{
             LOGGER.info("LocationEJB: Adding a location.");
             em.persist(location);
@@ -52,7 +52,6 @@ public class LocationEJB implements LocationLocal{
                     "LocationEJB: Exception adding the location.", e.getMessage());
             throw new CreateException(e.getMessage());
         }
-        return location;
     }
     
     /**
@@ -80,10 +79,10 @@ public class LocationEJB implements LocationLocal{
      * @throws DeleteException 
      */
     @Override
-    public void removeLocation(LocationBean location) throws DeleteException {
+    public void removeLocation(Integer id) throws DeleteException {
         try{
             LOGGER.info("LocationEJB: Removing a location.");
-            em.remove(em.merge(location));
+            em.remove(em.merge(id));
             LOGGER.info("LocationEJB: Location removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -99,11 +98,11 @@ public class LocationEJB implements LocationLocal{
      * @throws ReadException 
      */
     @Override
-    public LocationBean findLocationbyId(LocationBean location) throws ReadException {
+    public LocationBean findLocationbyId(Integer id) throws ReadException {
         LocationBean loc = null;
         try{
             LOGGER.info("LocationEJB: Finding a location by id.");
-            loc = em.find(LocationBean.class, location.getIdLocation());
+            loc = em.find(LocationBean.class, id);
             LOGGER.info("LocationEJB: Location found by id.");
             return loc;
         }catch(Exception e){
@@ -122,7 +121,7 @@ public class LocationEJB implements LocationLocal{
         List<LocationBean> locations = null;
         try{
             LOGGER.info("LocationEJB: Finding all the locations.");
-            locations = em.createNamedQuery("finsAllLocations").getResultList();
+            locations = em.createNamedQuery("findAllLocations").getResultList();
             LOGGER.info("LocationEJB: Locations found.");
             return locations;
         }catch(Exception e){

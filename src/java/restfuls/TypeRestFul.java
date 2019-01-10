@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.Path;
@@ -21,10 +20,9 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Usuario
+ * @author Jon Gonzalez
  */
-@Stateless
-@Path("entities.typebean")
+@Path("type")
 public class TypeRestFul{
 
     /**
@@ -43,8 +41,9 @@ public class TypeRestFul{
      * @return 
      */
     @GET
+    @Path("types")
     @Produces({MediaType.APPLICATION_XML})
-    public List<TypeBean> findAll() {
+    public List<TypeBean> findAllTypes() {
         List<TypeBean> types = null;
         try {
             LOGGER.info("TypeRestFul: Finding all types.");

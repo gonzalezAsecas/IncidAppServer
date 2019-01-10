@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="location", schema="incidapp")
 @XmlRootElement
+@NamedQuery(name="findAllLocations",
+            query="SELECT s FROM LocationBean s")
 public class LocationBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -21,9 +21,9 @@ public interface UserLocal {
 
     public void editUser(UserBean user) throws UpdateException;
 
-    public void removeUser(UserBean user) throws DeleteException;
+    public void removeUser(Integer id) throws DeleteException;
 
-    public UserBean findUserbyId(UserBean user) throws ReadException;
+    public UserBean findUserbyId(Integer id) throws ReadException;
 
     public List<UserBean> findAllUsers() throws ReadException;
     

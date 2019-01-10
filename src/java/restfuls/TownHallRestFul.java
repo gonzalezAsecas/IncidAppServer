@@ -22,6 +22,7 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -66,7 +67,6 @@ public class TownHallRestFul{
      * @param townhall 
      */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(TownHallBean townhall) {
         try {
@@ -86,10 +86,10 @@ public class TownHallRestFul{
     @DELETE
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void remove(TownHallBean townhall) {
+    public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("TownHallRestFul: Removing a town hall.");
-            townhallejb.removeTownHall(townhall);
+            townhallejb.removeTownHall(id);
             LOGGER.info("TownHallRestFul: Town hall removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception removing the town hall.", ex.getMessage());
@@ -105,11 +105,11 @@ public class TownHallRestFul{
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    public TownHallBean find(TownHallBean townhall) {
+    public TownHallBean find(@PathParam("id") Integer id) {
         TownHallBean th = null;
         try {
             LOGGER.info("TownHallRestFul: Finding a town hall by id.");
-            th = townhallejb.findTownHallbyId(townhall);
+            th = townhallejb.findTownHallbyId(id);
             LOGGER.info("TownHallRestFul: Town hall found by id.");
             return th;
         } catch (ReadException ex) {
