@@ -11,6 +11,7 @@ import exceptions.DeleteException;
 import exceptions.ReadException;
 import exceptions.UpdateException;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -168,7 +169,9 @@ public class UserEJB implements UserLocal{
             us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", login).getSingleResult();
             LOGGER.info("UserEJB: User found");
             if(us != null){
-                //TODO cambio contraseña
+                //Generate the new password and remove the the hyphens
+                us.setPassword(UUID.randomUUID().toString().replace("-", ""));
+                
             }
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
