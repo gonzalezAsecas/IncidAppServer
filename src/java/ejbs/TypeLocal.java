@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entities;
+package ejbs;
+
+import entities.TypeBean;
+import exceptions.ReadException;
+import java.util.List;
 
 /**
  *
  * @author Jon Gonzalez
  */
-public enum Estate {
-    OUTSTANDING
+public interface TypeLocal {
+    public List<TypeBean> findAllTypes() throws ReadException;
 }

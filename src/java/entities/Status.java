@@ -10,5 +10,6 @@ package entities;
  * @author Jon Gonzalez
  */
 public enum Status {
-    
+    ENABLED,
+    DISABLED
 }

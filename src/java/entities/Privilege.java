@@ -10,5 +10,7 @@ package entities;
  * @author Jon Gonzalez
  */
 public enum Privilege {
-    
+    USER,
+    TOWNHALLUSER,
+    ADMIN
 }
