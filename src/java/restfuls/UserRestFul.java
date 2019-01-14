@@ -135,6 +135,25 @@ public class UserRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    public List<UserBean> findAllTHU() {
+        List<UserBean> users = null;
+        try {
+            LOGGER.info("UserRestFul: Finding all users.");
+            users = userejb.findAllTHUsers();
+            LOGGER.info("UserRestFul: All users found.");
+            return users;
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the users.", ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
     /**
      * 
      * @return 

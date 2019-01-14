@@ -24,8 +24,10 @@ public interface UserLocal {
     public void removeUser(UserBean user) throws DeleteException;
 
     public UserBean findUserbyId(Integer id) throws ReadException;
-
+    
     public List<UserBean> findAllUsers() throws ReadException;
+
+    public List<UserBean> findAllTHUsers() throws ReadException;
     
     public UserBean findUserbyLogin(UserBean user) throws ReadException;
     

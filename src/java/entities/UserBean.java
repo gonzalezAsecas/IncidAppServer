@@ -34,9 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name="user", schema="incidapp")
 @XmlRootElement
 @NamedQueries({@NamedQuery(
+                name="findAllTHUsers", 
+                query="SELECT s FROM UserBean s WHERE s.privilege = 1"),
+               @NamedQuery(
                 name="findAllUsers", 
                 query="SELECT s FROM UserBean s"),
-              @NamedQuery(
+               @NamedQuery(
                 name="findUserbyLogin", 
                 query="SELECT s FROM UserBean s WHERE s.login = :login")
 })
