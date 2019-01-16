@@ -98,7 +98,7 @@ public class UserRestFul {
     
     /**
      * 
-     * @param user
+     * @param id
      * @return 
      */
     @GET
@@ -141,16 +141,17 @@ public class UserRestFul {
      * @return 
      */
     @GET
+    @Path("ATH")
     @Produces({MediaType.APPLICATION_XML})
     public List<UserBean> findAllTHU() {
         List<UserBean> users = null;
         try {
-            LOGGER.info("UserRestFul: Finding all users.");
+            LOGGER.info("UserRestFul: Finding all town hall users.");
             users = userejb.findAllTHUsers();
-            LOGGER.info("UserRestFul: All users found.");
+            LOGGER.info("UserRestFul: All town hall users found.");
             return users;
         } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the users.", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the town hall users.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
     }

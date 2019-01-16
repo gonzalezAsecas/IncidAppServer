@@ -22,7 +22,6 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -139,8 +138,7 @@ public class UserEJB implements UserLocal{
         List<UserBean> users = null;
         try{
             LOGGER.info("UserEJB: Finding all the users.");
-            users = em.createNamedQuery("findAllUsers")
-                    .setParameter("privilege", Privilege.TOWNHALLUSER).getResultList();
+            users = em.createNamedQuery("findAllUsers").getResultList();
             LOGGER.info("UserEJB: Users found.");
             return users;
         }catch(Exception e){
@@ -173,6 +171,7 @@ public class UserEJB implements UserLocal{
     
     /**
      * 
+     * @param user
      * @return
      * @throws ReadException 
      */

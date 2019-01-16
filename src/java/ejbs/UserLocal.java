@@ -17,6 +17,7 @@ import java.util.List;
  * @author Jon Gonzalez
  */
 public interface UserLocal {
+    
     public UserBean createUser(UserBean user) throws CreateException;
 
     public void editUser(UserBean user) throws UpdateException;
