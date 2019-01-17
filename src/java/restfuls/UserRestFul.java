@@ -157,15 +157,15 @@ public class UserRestFul {
     }
     /**
      * 
+     * @param login
      * @return 
      */
     @GET
-    @Path("{login}/{password}")
+    @Path("{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
-        UserBean user= new UserBean();
+    public UserBean findUserbyLogin(@PathParam("login") String login) {
+        UserBean user = new UserBean();
         user.setLogin(login);
-        user.setPassword(password);
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
             user = userejb.findUserbyLogin(user);
@@ -177,14 +177,20 @@ public class UserRestFul {
         }
     }
     
+    /**
+     * 
+     * @param login 
+     */
     @GET
     @Path("passwordChange/{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public void findUserToChangePassword(@PathParam("login")String login){
+    public UserBean findUserToChangePassword(@PathParam("login")String login){
+        UserBean user = new UserBean();
         try{
             LOGGER.info("UserRestFul: Finding user by login to change the password.");
-            userejb.findUserToChangePassword(login);
+            user = userejb.findUserToChangePassword(login);
             LOGGER.info("UserRestFul: User found.");
+            return user;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);
