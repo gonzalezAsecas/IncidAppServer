@@ -11,11 +11,13 @@ import exceptions.DeleteException;
 import exceptions.ReadException;
 import exceptions.UpdateException;
 import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author Jon Gonzalez
  */
+@Local
 public interface LocationLocal {
     public void createLocation(LocationBean location) throws CreateException;
 

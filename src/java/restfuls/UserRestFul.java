@@ -98,7 +98,7 @@ public class UserRestFul {
     
     /**
      * 
-     * @param user
+     * @param id
      * @return 
      */
     @GET
@@ -138,34 +138,20 @@ public class UserRestFul {
     
     /**
      * 
+     * @param login
+     * @param password
      * @return 
      */
     @GET
+    @Path("{login}/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<UserBean> findAllTHU() {
-        List<UserBean> users = null;
-        try {
-            LOGGER.info("UserRestFul: Finding all users.");
-            users = userejb.findAllTHUsers();
-            LOGGER.info("UserRestFul: All users found.");
-            return users;
-        } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the users.", ex.getMessage());
-            throw new InternalServerErrorException(ex);
-        }
-    }
-    /**
-     * 
-     * @return 
-     */
-    @GET
-    @Path("{login}")
-    @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(@PathParam("login")String login) {
+    public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
         UserBean user= new UserBean();
+        user.setLogin(login);
+        user.setPassword(password);
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
-            user = userejb.findUserbyLogin(login);
+            user = userejb.findUserbyLogin(user);
             LOGGER.info("UserRestFul: User found by login.");
             return user;
         } catch (ReadException ex) {
@@ -177,11 +163,13 @@ public class UserRestFul {
     @GET
     @Path("passwordChange/{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public void findUserToChangePassword(@PathParam("login")String login){
+    public UserBean findUserToChangePassword(@PathParam("login")String login){
+        UserBean us= new UserBean();
         try{
             LOGGER.info("UserRestFul: Finding user by login to change the password.");
-            userejb.findUserToChangePassword(login);
+            us = userejb.findUserToChangePassword(login);
             LOGGER.info("UserRestFul: User found.");
+            return us;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);

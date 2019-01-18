@@ -11,11 +11,13 @@ import exceptions.DeleteException;
 import exceptions.ReadException;
 import exceptions.UpdateException;
 import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author Jon Gonzalez
  */
+@Local
 public interface TownHallLocal {
     public void createTownHall(TownHallBean townhall) throws CreateException;
 

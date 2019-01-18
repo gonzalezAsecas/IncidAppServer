@@ -11,11 +11,13 @@ import exceptions.DeleteException;
 import exceptions.ReadException;
 import exceptions.UpdateException;
 import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author Gorka Redondo
  */
+@Local
 public interface IncidentLocal {
     public void createIncident(IncidentBean incident) throws CreateException;
 

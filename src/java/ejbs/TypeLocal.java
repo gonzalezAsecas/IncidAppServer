@@ -8,11 +8,13 @@ package ejbs;
 import entities.TypeBean;
 import exceptions.ReadException;
 import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author Jon Gonzalez
  */
+@Local
 public interface TypeLocal {
     public List<TypeBean> findAllTypes() throws ReadException;
 }
