@@ -32,5 +32,5 @@ public interface UserLocal {
     
     public UserBean findUserbyLogin(UserBean user) throws ReadException;
     
-    public UserBean findUserToChangePassword(String login) throws ReadException;
+    public void findUserToChangePassword(String login) throws ReadException;
 }

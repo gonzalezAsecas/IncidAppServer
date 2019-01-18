@@ -178,15 +178,20 @@ public class UserEJB implements UserLocal{
     @Override
     public UserBean findUserbyLogin(UserBean user) throws ReadException{
         UserBean us;
+        String cause = "login";
         try{
             LOGGER.info("UserEJB: Finding the user by login.");
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
                     .setParameter("login", user.getLogin()).getSingleResult();
             LOGGER.info("UserEJB: User found.");
+            if(!us.getPassword().equals(user.getPassword())){
+                cause = "password";
+                throw new Exception();
+            }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
-            throw new ReadException(e.getMessage());
+            throw new ReadException(e.getMessage(), cause);
         }
     }
     
@@ -196,7 +201,7 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public UserBean findUserToChangePassword(String login) throws ReadException {
+    public void findUserToChangePassword(String login) throws ReadException {
         UserBean us = new UserBean();
         try{
             LOGGER.info("UserEJB: Finding user by login for change the password");
@@ -206,7 +211,6 @@ public class UserEJB implements UserLocal{
                 //make new password
                 
             }
-            return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
             throw new ReadException(e.getMessage());
