@@ -29,7 +29,7 @@ public interface UserLocal {
 
     public List<UserBean> findAllTHUsers() throws ReadException;
     
-    public UserBean findUserbyLogin(UserBean user) throws ReadException;
+    public UserBean findUserbyLogin(String login) throws ReadException;
     
     public void findUserToChangePassword(String login) throws ReadException;
 }

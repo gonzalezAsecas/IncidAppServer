@@ -11,79 +11,107 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.ReadException;
 import exceptions.UpdateException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 
 /**
- *
+ * The user ejb for communication with the entity manager.
+ * There are method for send emails, decrypt and hash data and do 
+ * the user's CRUD
  * @author Jon Gonzalez
  */
 @Stateless
 public class UserEJB implements UserLocal{
     
     /**
-     * 
+     * The logger of the server application
      */
     private static final Logger LOGGER = Logger.getLogger("javafxserverside");
     
     /**
-     * 
+     * The entity manager 
      */
     @PersistenceContext
     private EntityManager em;
     
     /**
-     * 
-     * @param user
-     * @return
-     * @throws CreateException 
+     * The resource bundle properties for read the properties file
+     */
+    ResourceBundle properties = ResourceBundle
+                .getBundle("properties.Properties.properties");
+    
+    /**
+     * Create an user in the database decrypting and hashing the password
+     * @param user the user is going to be save in the database
+     * @return the user inself
+     * @throws CreateException when there is a problem creating the user
      */
     @Override
     public UserBean createUser(UserBean user) throws CreateException {
         try{
+            //hash and decrypt the password and set into the user
             user.setPassword(hashPassword(decryptPassword(user.getPassword())));
             LOGGER.info("UserEJB: Adding a user.");
+            //Do persist the user
             em.persist(user);
             LOGGER.info("UserEJB: User added.");
+            return user;
+        //if any problem have ocurred
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
                     "UserEJB: Exception adding the user.", e.getMessage());
             throw new CreateException(e.getMessage());
         }
-        return user;
     }
     
     /**
-     * 
-     * @param user
-     * @throws UpdateException 
+     * Merge the state of the current user and synchronized the persistent context
+     * @param user the user for modify it
+     * @throws UpdateException when there is a problem modifying the user
      */
     @Override
     public void editUser(UserBean user) throws UpdateException {
         try{
             LOGGER.info("UserEJB: Editting a user.");
+            //merge the state of the user into the persistent context
             em.merge(user);
+            //synchronize the persistent context
             em.flush();
             LOGGER.info("UserEJB: User updated.");
+        //if any problem have ocurred
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
                     "UserEJB: Exception updating the user.", e.getMessage());
@@ -177,22 +205,17 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public UserBean findUserbyLogin(UserBean user) throws ReadException{
+    public UserBean findUserbyLogin(String login) throws ReadException{
         UserBean us;
-        String cause = "login";
         try{
             LOGGER.info("UserEJB: Finding the user by login.");
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
-                    .setParameter("login", user.getLogin()).getSingleResult();
+                    .setParameter("login", login).getSingleResult();
             LOGGER.info("UserEJB: User found.");
-            if(!us.getPassword().equals(user.getPassword())){
-                cause = "password";
-                throw new Exception();
-            }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
-            throw new ReadException(e.getMessage(), cause);
+            throw new ReadException(e.getMessage());
         }
     }
     
@@ -204,16 +227,28 @@ public class UserEJB implements UserLocal{
     @Override
     public void findUserToChangePassword(String login) throws ReadException {
         UserBean us = new UserBean();
+        SecureRandom random;
+        String[] symbols = {"0", "1", "2", "3", "4", "5", "6", "7", "8",
+                    "9", "a", "b", "c", "d", "e", "f"};
+        String newPassword = "";
         try{
             LOGGER.info("UserEJB: Finding user by login for change the password");
-            us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", login).getSingleResult();
+            us = this.findUserbyLogin(login);
             LOGGER.info("UserEJB: User found");
             if(us != null){
-                //make new password
-                
+                random = SecureRandom.getInstance("SHA1PRNG");
+                for(int i=0; i<10; i++){
+                    newPassword+=symbols[random.nextInt(symbols.length)];
+                }
+                sendEmail(this.decryptData("email.data"),
+                        this.decryptData("emailpwd.data"),
+                        us.getEmail(), newPassword);
+                us.setPassword(hashPassword(decryptPassword(us.getPassword())));
+                this.editUser(us);
             }
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
+            LOGGER.log(Level.SEVERE,
+                    "TownHallUserEJB: Exception finding the users.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }
@@ -286,6 +321,65 @@ public class UserEJB implements UserLocal{
             return password;
         } catch (NoSuchAlgorithmException ex) {
             LOGGER.log(Level.SEVERE, "Exception hashing the password", ex);
+            throw new Exception(ex);
+        }
+    }
+    /**
+     * 
+     * @param path
+     * @return
+     * @throws Exception 
+     */
+    private String decryptData(String path) throws Exception{
+        File file;
+        FileInputStream fis;
+        ObjectInputStream ois;
+        String data;
+        String pwd= properties.getString("pwd");
+        try {
+            byte[] salt = "Hello World!!!!!".getBytes();
+            KeySpec spec = new PBEKeySpec(pwd.toCharArray(), salt, 6000, 128);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] key = factory.generateSecret(spec).getEncoded();
+            SecretKey privateKey = new SecretKeySpec(key, 0, key.length, "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            file = new File(path);
+            fis = new FileInputStream(file);
+            ois = new ObjectInputStream(fis);
+            IvParameterSpec ivParam = new IvParameterSpec((byte[]) ois.readObject());
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, ivParam);
+            byte[] s = (byte[]) ois.readObject();
+            byte[] decodedMessage = cipher.doFinal(s);
+            data = new String(decodedMessage);
+            ois.close();
+            fis.close();
+            return data;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | IOException | ClassNotFoundException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException ex) {
+            LOGGER.log(Level.SEVERE, "", ex);
+            throw new Exception(ex);
+        }
+    }
+    
+    /**
+     * 
+     * @param email
+     * @param newPassword 
+     */
+    private void sendEmail(String path, String password, String userEmail, String newPassword) throws Exception {
+        Email email;
+        try{
+            email = new SimpleEmail();
+            email.setHostName(properties.getString("hostName"));
+            email.setSmtpPort(Integer.getInteger(properties.getString("port")));
+            email.setAuthentication(path, password);
+            email.setSSLOnConnect(true);
+            email.setFrom("Binary AI");
+            email.setSubject("IncidApp: Your password have changed");
+            email.setMsg("Today, "+ LocalDate.now().toString() + ", your password have changed and now is " + newPassword + ".");
+            email.addTo(userEmail);
+            email.send();
+       }catch(EmailException ex){
+            LOGGER.log(Level.SEVERE, "", ex);
             throw new Exception(ex);
         }
     }

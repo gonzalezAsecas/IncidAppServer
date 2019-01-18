@@ -159,15 +159,13 @@ public class UserRestFul {
      * @return 
      */
     @GET
-    @Path("{login}/{password}")
+    @Path("{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
+    public UserBean findUserbyLogin(@PathParam("login")String login) {
         UserBean user= new UserBean();
-        user.setLogin(login);
-        user.setPassword(password);
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
-            user = userejb.findUserbyLogin(user);
+            user = userejb.findUserbyLogin(login);
             LOGGER.info("UserRestFul: User found by login.");
             return user;
         } catch (ReadException ex) {
