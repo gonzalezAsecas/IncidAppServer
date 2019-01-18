@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Path("entities.townhallbean")
+@Path("townhall")
 public class TownHallRestFul{
 
     /**

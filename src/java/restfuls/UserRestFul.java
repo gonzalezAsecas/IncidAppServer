@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jon Gonzalez
  */
-@Path("entities.user")
+@Path("user")
 public class UserRestFul {
 
     /**

@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Gorka Redondo
  */
-@Path("entities.incidentbean")
+@Path("incident")
 public class IncidentRestFul {
 
     /**

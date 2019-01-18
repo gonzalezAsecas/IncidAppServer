@@ -6,7 +6,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -19,7 +19,7 @@ public class SignatureBean implements Serializable {
     private Integer id;
     private Integer idPerson;
     private Integer idIncident;
-    private Timestamp signatureDate;
+    private Date signatureDate;
 
     public Integer getId() {
         return id;
@@ -45,11 +45,11 @@ public class SignatureBean implements Serializable {
         this.idIncident = idIncident;
     }
 
-    public Timestamp getSignatureDate() {
+    public Date getSignatureDate() {
         return signatureDate;
     }
 
-    public void setSignatureDate(Timestamp signatureDate) {
+    public void setSignatureDate(Date signatureDate) {
         this.signatureDate = signatureDate;
     }
 
