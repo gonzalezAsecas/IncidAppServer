@@ -43,6 +43,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
@@ -167,8 +168,7 @@ public class UserEJB implements UserLocal{
         List<UserBean> users = null;
         try{
             LOGGER.info("UserEJB: Finding all the users.");
-            users = em.createNamedQuery("findAllUsers")
-                    .setParameter("privilege", Privilege.TOWNHALLUSER).getResultList();
+            users = em.createNamedQuery("findAllUsers").getResultList();
             LOGGER.info("UserEJB: Users found.");
             return users;
         }catch(Exception e){
@@ -184,37 +184,20 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public List<UserBean> findAllTHUsers() throws ReadException {
-        List<UserBean> users = null;
-        try{
-            LOGGER.info("UserEJB: Finding all the town hall users.");
-            users = em.createNamedQuery("findAllTHUsers")
-                    .setParameter("privilege", Privilege.TOWNHALLUSER).getResultList();
-            LOGGER.info("UserEJB: Town hall users found.");
-            return users;
-        }catch(Exception e){
-            LOGGER.log(Level.SEVERE,
-                    "UserEJB: Exception finding the town hall users.", e.getMessage());
-            throw new ReadException(e.getMessage());
-        }
-    }
-    
-    /**
-     * 
-     * @return
-     * @throws ReadException 
-     */
-    @Override
-    public UserBean findUserbyLogin(String login) throws ReadException{
+    public UserBean findUserbyLogin(UserBean user) throws ReadException{
         UserBean us;
-        try{
+        try {
+            user.setPassword(this.hashPassword(this.decryptPassword(user.getPassword())));
             LOGGER.info("UserEJB: Finding the user by login.");
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
-                    .setParameter("login", login).getSingleResult();
+                    .setParameter("login", user.getLogin()).getSingleResult();
             LOGGER.info("UserEJB: User found.");
+            if(!user.getPassword().equals(us.getPassword())){
+                throw new Exception();
+            }
             return us;
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the users.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }
@@ -225,7 +208,7 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public void findUserToChangePassword(String login) throws ReadException {
+    public UserBean findUserToChangePassword(String login) throws ReadException {
         UserBean us = new UserBean();
         SecureRandom random;
         String[] symbols = {"0", "1", "2", "3", "4", "5", "6", "7", "8",
@@ -233,7 +216,8 @@ public class UserEJB implements UserLocal{
         String newPassword = "";
         try{
             LOGGER.info("UserEJB: Finding user by login for change the password");
-            us = this.findUserbyLogin(login);
+            us = (UserBean) em.createNamedQuery("findUserbyLogin")
+                    .setParameter("login", login).getSingleResult();
             LOGGER.info("UserEJB: User found");
             if(us != null){
                 random = SecureRandom.getInstance("SHA1PRNG");
@@ -246,6 +230,7 @@ public class UserEJB implements UserLocal{
                 us.setPassword(hashPassword(decryptPassword(us.getPassword())));
                 this.editUser(us);
             }
+            return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
                     "TownHallUserEJB: Exception finding the users.", e.getMessage());
@@ -258,7 +243,7 @@ public class UserEJB implements UserLocal{
      * @param password the password encrypted
      * @return the password decrypted
      */
-    private String decryptPassword(String password) throws Exception{
+    private byte[] decryptPassword(String password) throws Exception{
         FileInputStream fis;
         byte[] passwordBytes;
         byte[] key;
@@ -266,10 +251,8 @@ public class UserEJB implements UserLocal{
         PrivateKey privateKey;
         Cipher cipher;
         try{
-            //get the lenght of the password in bytes
-            passwordBytes = new byte[password.getBytes().length];
             //save the password converted in bytes
-            passwordBytes = password.getBytes();
+            passwordBytes = DatatypeConverter.parseHexBinary(password);
             LOGGER.info("UserEJB: Decrypting the password.");
             //Open the stream for read the private key
             fis= new FileInputStream("private.key");
@@ -287,10 +270,9 @@ public class UserEJB implements UserLocal{
             cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             //initialize the cipher object in decrypt mode with the private key
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            //decrypt the text and set the password with the data
-            password = new String(cipher.doFinal(passwordBytes));
             LOGGER.info("UserEJB: Decrypted the password");
-            return password;
+            //decrypt the text and set the password with the data
+            return cipher.doFinal(passwordBytes);
         }   catch (FileNotFoundException ex) {
             LOGGER.log(Level.SEVERE, "Exception decrypting the password", ex);
             throw new Exception(ex);
@@ -307,18 +289,17 @@ public class UserEJB implements UserLocal{
      * @param password
      * @return
      */
-    private String hashPassword(String password) throws Exception {
+    private String hashPassword(byte[] password) throws Exception {
         MessageDigest md;
         try {
             LOGGER.info("USEREJB: Hashing the password");
             //instance the message digest with sha algorithm
             md = MessageDigest.getInstance("SHA");
             //set the password in bytes for resume
-            md.update(password.getBytes());
-            //calculate the resume
-            password = new String(md.digest());
+            md.update(password);
             LOGGER.info("USEREJB: Hashed the password");
-            return password;
+            //calculate the resume
+            return new String(md.digest());
         } catch (NoSuchAlgorithmException ex) {
             LOGGER.log(Level.SEVERE, "Exception hashing the password", ex);
             throw new Exception(ex);
