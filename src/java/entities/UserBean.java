@@ -51,7 +51,7 @@ public class UserBean implements Serializable {
     @NotNull
     private String email;
     @NotNull
-    private String password;
+    private byte[] password;
     private String fullName;
     @NotNull
     @Enumerated(EnumType.ORDINAL)
@@ -87,11 +87,11 @@ public class UserBean implements Serializable {
         this.login = login;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 

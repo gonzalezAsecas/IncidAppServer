@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -85,6 +86,8 @@ public class UserEJB implements UserLocal{
         try{
             //hash and decrypt the password and set into the user
             user.setPassword(hashPassword(decryptPassword(user.getPassword())));
+            user.setLastAccess(Date.valueOf(LocalDate.now()));
+            user.setLastPasswordChange(Date.valueOf(LocalDate.now()));
             LOGGER.info("UserEJB: Adding a user.");
             //Do persist the user
             em.persist(user);
@@ -184,21 +187,23 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public UserBean findUserbyLogin(UserBean user) throws ReadException{
+    public UserBean findUserbyLogin(String login, String password) throws ReadException{
+        UserBean user = new UserBean();
         UserBean us;
         try {
-            user.setPassword(this.decryptPassword(this.hashPassword(user.getPassword())));
+            user.setLogin(login);
+            user.setPassword(this.decryptPassword(this.hashPassword(DatatypeConverter.parseHexBinary(password))));
             LOGGER.info("UserEJB: Finding the user by login.");
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
                     .setParameter("login", user.getLogin()).getSingleResult();
             LOGGER.info("UserEJB: User found.");
-            user.setPassword(toStringHex(user.getPassword()));
             if(!user.getPassword().equals(us.getPassword())){
+                //mesagedigest.equals
                 throw new Exception();
             }
             return us;
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the users.", e.getMessage());
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the user.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }
@@ -228,13 +233,13 @@ public class UserEJB implements UserLocal{
                 sendEmail(this.decryptData("email.data"),
                         this.decryptData("emailpwd.data"),
                         us.getEmail(), newPassword);
-                us.setPassword(hashPassword(decryptPassword(us.getPassword())));
+                us.setPassword(hashPassword(us.getPassword()));
                 this.editUser(us);
             }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
-                    "TownHallUserEJB: Exception finding the users.", e.getMessage());
+                    "UserEJB: Exception finding the user to change the password.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }
@@ -244,16 +249,14 @@ public class UserEJB implements UserLocal{
      * @param password the password encrypted
      * @return the password decrypted
      */
-    private String decryptPassword(String password) throws Exception{
+    private byte[] decryptPassword(byte[] password) throws Exception{
         FileInputStream fis;
-        byte[] passwordBytes;
         byte[] key;
         KeyFactory keyFactory;
         PrivateKey privateKey;
         Cipher cipher;
         try{
-            //save the password converted in bytes
-            passwordBytes = DatatypeConverter.parseHexBinary(password);
+            //passwordBytes = DatatypeConverter.parseHexBinary(new String(password));
             LOGGER.info("UserEJB: Decrypting the password.");
             //Open the stream for read the private key
             fis= new FileInputStream("private.key");
@@ -272,7 +275,7 @@ public class UserEJB implements UserLocal{
             //initialize the cipher object in decrypt mode with the private key
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             //decrypt the text and set the password with the data
-            password = new String(cipher.doFinal(passwordBytes));
+            password = cipher.doFinal(password);
             LOGGER.info("UserEJB: Decrypted the password");
             return password;
         }   catch (FileNotFoundException ex) {
@@ -291,17 +294,17 @@ public class UserEJB implements UserLocal{
      * @param password
      * @return
      */
-    private String hashPassword(String password) throws Exception {
+    private byte[] hashPassword(byte[] password) throws Exception {
         MessageDigest md;
         try {
-            LOGGER.info("USEREJB: Hashing the password");
+            LOGGER.info("UserEJB: Hashing the password");
             //instance the message digest with sha algorithm
             md = MessageDigest.getInstance("SHA");
             //set the password in bytes for resume
-            md.update(password.getBytes());
+            md.update(password);
             //calculate the resume
-            password = new String(md.digest());
-            LOGGER.info("USEREJB: Hashed the password");
+            password = md.digest();
+            LOGGER.info("UserEJB: Hashed the password");
             return password;
         } catch (NoSuchAlgorithmException ex) {
             LOGGER.log(Level.SEVERE, "Exception hashing the password", ex);
@@ -359,22 +362,12 @@ public class UserEJB implements UserLocal{
             email.setSSLOnConnect(true);
             email.setFrom("Binary AI");
             email.setSubject("IncidApp: Your password have changed");
-            email.setMsg("Today, "+ LocalDate.now().toString() + ", your password have changed and now is " + newPassword + ".");
+            email.setMsg("Today, "+ LocalDate.now().toString() + ", your password has been changed and now is " + newPassword + ".");
             email.addTo(userEmail);
             email.send();
        }catch(EmailException ex){
             LOGGER.log(Level.SEVERE, "", ex);
             throw new Exception(ex);
         }
-    }
-    
-    /**
-     * 
-     * @param password
-     * @return 
-     */
-    public String toStringHex(String password){
-        byte[] pass = DatatypeConverter.parseHexBinary(password);
-        return new String(pass);
     }
 }

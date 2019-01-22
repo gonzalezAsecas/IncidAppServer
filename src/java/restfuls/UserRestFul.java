@@ -25,6 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -147,11 +148,9 @@ public class UserRestFul {
     @Produces({MediaType.APPLICATION_XML})
     public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
         UserBean user= new UserBean();
-        user.setLogin(login);
-        user.setPassword(password);
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
-            user = userejb.findUserbyLogin(user);
+            user = userejb.findUserbyLogin(login, password);
             LOGGER.info("UserRestFul: User found by login.");
             return user;
         } catch (ReadException ex) {
