@@ -38,7 +38,6 @@ public class IncidentEJB implements IncidentLocal{
     /**
      * 
      * @param incident
-     * @return
      * @throws CreateException 
      */
     @Override
@@ -93,7 +92,6 @@ public class IncidentEJB implements IncidentLocal{
 
     /**
      * 
-     * @param incident
      * @return
      * @throws ReadException 
      */
@@ -125,7 +123,6 @@ public class IncidentEJB implements IncidentLocal{
             LOGGER.info("IncidentEJB: incidents found.");
             return incidents;
         }catch(Exception e){
-            e.printStackTrace();
             LOGGER.log(Level.SEVERE, "IncidentEJB: Exception finding the incidents.", e.getMessage());
             throw new ReadException(e.getMessage());
         }

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="type", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="finAllTypes", 
+@NamedQuery(name="findAllTypes", 
             query="SELECT s FROM TypeBean s")
 public class TypeBean implements Serializable{
     @Id
@@ -113,6 +113,6 @@ public class TypeBean implements Serializable{
 
     @Override
     public String toString() {
-        return "TypeBean{" + "id=" + id + ", name=" + name + ", severity=" + severity + ", incidents=" + incidents + '}';
+        return name;
     }
 }

@@ -46,7 +46,7 @@ public class IncidentRestFul {
 
     /**
      * 
-     * @param entity 
+     * @param incident 
      */
     @POST
     @Consumes({MediaType.APPLICATION_XML})
@@ -124,7 +124,6 @@ public class IncidentRestFul {
             LOGGER.info("IncidentRestFul: All incidents found.");
             return incidents;
         } catch (ReadException ex) {
-            ex.printStackTrace();
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding all the incidents.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
