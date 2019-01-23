@@ -192,18 +192,20 @@ public class UserEJB implements UserLocal{
         UserBean us;
         try {
             user.setLogin(login);
-            user.setPassword(this.decryptPassword(this.hashPassword(DatatypeConverter.parseHexBinary(password))));
+            user.setPassword(this.hashPassword(this.decryptPassword(
+                    DatatypeConverter.parseHexBinary(password))));
             LOGGER.info("UserEJB: Finding the user by login.");
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
                     .setParameter("login", user.getLogin()).getSingleResult();
             LOGGER.info("UserEJB: User found.");
-            if(!user.getPassword().equals(us.getPassword())){
-                //mesagedigest.equals
+            if(!MessageDigest.isEqual(user.getPassword(), us.getPassword())){
+            //if(!user.getPassword().equals(us.getPassword())){
                 throw new Exception();
             }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the user.", e.getMessage());
+            e.printStackTrace();
             throw new ReadException(e.getMessage());
         }
     }
@@ -232,7 +234,7 @@ public class UserEJB implements UserLocal{
                 }
                 sendEmail(this.decryptData("email.data"),
                         this.decryptData("emailpwd.data"),
-                        us.getEmail(), newPassword);
+                        us.getEmail(), newPassword, true);
                 us.setPassword(hashPassword(us.getPassword()));
                 this.editUser(us);
             }
@@ -240,6 +242,7 @@ public class UserEJB implements UserLocal{
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
                     "UserEJB: Exception finding the user to change the password.", e.getMessage());
+            e.printStackTrace();
             throw new ReadException(e.getMessage());
         }
     }
@@ -352,17 +355,25 @@ public class UserEJB implements UserLocal{
      * @param email
      * @param newPassword 
      */
-    private void sendEmail(String path, String password, String userEmail, String newPassword) throws Exception {
+    private void sendEmail(String path, String password, String userEmail, String newPassword, boolean pass) throws Exception {
         Email email;
         try{
             email = new SimpleEmail();
-            email.setHostName(properties.getString("hostName"));
-            email.setSmtpPort(Integer.getInteger(properties.getString("port")));
+            //email.setHostName(properties.getString("hostName"));
+            email.setHostName("stmp.gmail.com");
+            //email.setSmtpPort(Integer.getInteger(properties.getString("port")));
+            email.setSmtpPort(587);
             email.setAuthentication(path, password);
-            email.setSSLOnConnect(true);
-            email.setFrom("Binary AI");
+            //email.setSSLOnConnect(true);
+            email.setDebug(true);
+            email.setTLS(true);
+            email.setFrom(path);
             email.setSubject("IncidApp: Your password have changed");
-            email.setMsg("Today, "+ LocalDate.now().toString() + ", your password has been changed and now is " + newPassword + ".");
+            if(pass){
+                email.setMsg("Today, "+ LocalDate.now().toString() + ", your password has been changed and now is " + newPassword + ".");
+            }else{
+                email.setMsg("You have change your password today. " + LocalDate.now().toString());
+            }
             email.addTo(userEmail);
             email.send();
        }catch(EmailException ex){

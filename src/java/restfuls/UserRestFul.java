@@ -145,9 +145,10 @@ public class UserRestFul {
      */
     @GET
     @Path("{login}/{password}")
+    @Consumes({MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(@PathParam("login")String login, @PathParam("password")String password) {
-        UserBean user= new UserBean();
+    public UserBean findUserbyLogin(@PathParam("login") String login, @PathParam("password") String password) {
+        UserBean user = new UserBean();
         try {
             LOGGER.info("UserRestFul: Finding user by login.");
             user = userejb.findUserbyLogin(login, password);
