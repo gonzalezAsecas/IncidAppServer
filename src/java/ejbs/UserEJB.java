@@ -5,7 +5,6 @@
  */
 package ejbs;
 
-import entities.Privilege;
 import entities.UserBean;
 import exceptions.CreateException;
 import exceptions.DeleteException;
@@ -362,11 +361,13 @@ public class UserEJB implements UserLocal{
             //email.setHostName(properties.getString("hostName"));
             email.setHostName("stmp.gmail.com");
             //email.setSmtpPort(Integer.getInteger(properties.getString("port")));
+            //email.setSmtpPort(465);
             email.setSmtpPort(587);
             email.setAuthentication(path, password);
+            email.setStartTLSEnabled(true);
             //email.setSSLOnConnect(true);
-            email.setDebug(true);
-            email.setTLS(true);
+            //email.setDebug(true);
+            //email.setTLS(true);
             email.setFrom(path);
             email.setSubject("IncidApp: Your password have changed");
             if(pass){
