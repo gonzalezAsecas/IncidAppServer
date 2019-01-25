@@ -232,16 +232,15 @@ public class UserEJB implements UserLocal{
                     newPassword+=symbols[random.nextInt(symbols.length)];
                 }
                 sendEmail(this.decryptData("email.data"),
-                        this.decryptData("emailpwd.data"),
+                        this.decryptData("pwd.data"),
                         us.getEmail(), newPassword, true);
-                us.setPassword(hashPassword(us.getPassword()));
+                us.setPassword(hashPassword(newPassword.getBytes()));
                 this.editUser(us);
             }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE,
                     "UserEJB: Exception finding the user to change the password.", e.getMessage());
-            e.printStackTrace();
             throw new ReadException(e.getMessage());
         }
     }
@@ -357,9 +356,15 @@ public class UserEJB implements UserLocal{
     private void sendEmail(String path, String password, String userEmail, String newPassword, boolean pass) throws Exception {
         Email email;
         try{
+            LOGGER.info(path);
+            LOGGER.info(password);
+            LOGGER.info(userEmail);
+            //path="jampdesarrollo@gmail.com";
+            //password="abcd*1234";
+            //userEmail="jonasecas97@gmail.com";
             email = new SimpleEmail();
             //email.setHostName(properties.getString("hostName"));
-            email.setHostName("stmp.gmail.com");
+            email.setHostName("smtp.googlemail.com");
             //email.setSmtpPort(Integer.getInteger(properties.getString("port")));
             //email.setSmtpPort(465);
             email.setSmtpPort(587);
