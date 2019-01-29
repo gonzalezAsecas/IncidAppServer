@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Entity
 @Table(name="type", schema="incidapp")
@@ -35,7 +35,7 @@ public class TypeBean implements Serializable{
     @NotNull
     private String name;
     @NotNull
-    private Integer Severity;
+    private Integer severity;
     @OneToMany(mappedBy="type")
     private List<IncidentBean> incidents;
 
@@ -58,11 +58,11 @@ public class TypeBean implements Serializable{
     }
 
     public Integer getSeverity() {
-        return Severity;
+        return severity;
     }
 
-    public void setSeverity(Integer Severity) {
-        this.Severity = Severity;
+    public void setSeverity(Integer severity) {
+        this.severity = severity;
     }
 
     @XmlTransient
@@ -77,10 +77,10 @@ public class TypeBean implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.name);
-        hash = 67 * hash + Objects.hashCode(this.Severity);
-        hash = 67 * hash + Objects.hashCode(this.incidents);
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.severity);
+        hash = 17 * hash + Objects.hashCode(this.incidents);
         return hash;
     }
 
@@ -102,7 +102,7 @@ public class TypeBean implements Serializable{
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.Severity, other.Severity)) {
+        if (!Objects.equals(this.severity, other.severity)) {
             return false;
         }
         if (!Objects.equals(this.incidents, other.incidents)) {
@@ -113,6 +113,6 @@ public class TypeBean implements Serializable{
 
     @Override
     public String toString() {
-        return "TypeBean{" + "idType=" + id + ", name=" + name + ", Severity=" + Severity + ", incidents=" + incidents + '}';
+        return name;
     }
 }

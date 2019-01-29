@@ -118,6 +118,8 @@ public class TownHallEJB implements TownHallLocal{
         TownHallBean townHall = null;
         try{
             LOGGER.info("TownHallEJB: Finding a town hall by name.");
+            townHall = em.find(TownHallBean.class, name);
+            
             townHall = (TownHallBean) em.createNamedQuery("findTownHallbyName")
                     .setParameter("locality", name).getSingleResult();
             LOGGER.info("TownHallEJB: Town hall found by name.");

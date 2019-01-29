@@ -46,7 +46,7 @@ public class IncidentRestFul {
 
     /**
      * 
-     * @param entity 
+     * @param incident 
      */
     @POST
     @Consumes({MediaType.APPLICATION_XML})
@@ -60,10 +60,14 @@ public class IncidentRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-
+    
+    /**
+     * 
+     * @param incident 
+     */
     @PUT
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, IncidentBean incident) {
+    public void edit(IncidentBean incident) {
         try {
             LOGGER.info("IncidentRestFul: Editting a incident.");
             incidentejb.editIncident(incident);
@@ -73,13 +77,17 @@ public class IncidentRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-
+    
+    /**
+     * 
+     * @param id 
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("IncidentRestFul: Removing a incident.");
-            incidentejb.removeIncident(incidentejb.findIncidentbyId(id));
+            incidentejb.removeIncident(incidentejb.findIncidentById(id));
             LOGGER.info("IncidentRestFul: incident removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception removing the incident.", ex.getMessage());
@@ -92,27 +100,27 @@ public class IncidentRestFul {
     /**
      * 
      * @param id
-     * @return 
+     * @return incident
      */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     public IncidentBean find(@PathParam("id") Integer id) {
-        IncidentBean inc = null;
+        IncidentBean incident = null;
         try {
             LOGGER.info("IncidentRestFul: Finding a incident by id.");
-            inc = incidentejb.findIncidentbyId(id);
+            incident = incidentejb.findIncidentById(id);
             LOGGER.info("IncidentRestFul: incident found by id.");
-            return inc;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding the incident by id.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return incident;
     }
     
     /**
      * 
-     * @return 
+     * @return incidents
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -122,12 +130,11 @@ public class IncidentRestFul {
             LOGGER.info("IncidentRestFul: Finding all incidents.");
             incidents = incidentejb.findAllIncidents();
             LOGGER.info("IncidentRestFul: All incidents found.");
-            return incidents;
         } catch (ReadException ex) {
-            ex.printStackTrace();
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding all the incidents.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return incidents;
     }
     
 }
