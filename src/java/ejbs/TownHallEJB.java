@@ -44,12 +44,14 @@ public class TownHallEJB implements TownHallLocal{
     @Override
     public void createTownHall(TownHallBean townhall) throws CreateException {
         try{
-            LOGGER.info("TownHallEJB: Adding a location.");
+            LOGGER.info("TownHallEJB: Adding a townhall.");
+            townhall.setId(null);
             em.persist(townhall);
-            LOGGER.info("TownHallEJB: Town hall added.");
+            LOGGER.info("TownHallEJB: Townhall added.");
         }catch(Exception e){
+            e.printStackTrace();
             LOGGER.log(Level.SEVERE,
-                    "TownHallEJB: Exception adding the town hall.", e.getMessage());
+                    "TownHallEJB: Exception adding the townhall.", e.getMessage());
             throw new CreateException(e.getMessage());
         }
     }
@@ -107,6 +109,21 @@ public class TownHallEJB implements TownHallLocal{
             return townHall;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallEJB: Exception finding the town hall by id.", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+    }
+    
+    @Override
+    public TownHallBean findTownHallbyName(String name) throws ReadException {
+        TownHallBean townHall = null;
+        try{
+            LOGGER.info("TownHallEJB: Finding a town hall by name.");
+            townHall = (TownHallBean) em.createNamedQuery("findTownHallbyName")
+                    .setParameter("locality", name).getSingleResult();
+            LOGGER.info("TownHallEJB: Town hall found by name.");
+            return townHall;
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "TownHallEJB: Exception finding the town hall by name.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }

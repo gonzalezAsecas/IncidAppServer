@@ -28,9 +28,9 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Lander Lluvia
  */
-@Path("townhallbean")
+@Path("townhall/th")
 public class TownHallRestFul{
 
     /**
@@ -57,6 +57,7 @@ public class TownHallRestFul{
             townhallejb.createTownHall(townhall);
             LOGGER.info("TownHallRestFul: Town hall added.");
         } catch (CreateException ex) {
+            ex.printStackTrace();
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception adding the town hall.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -90,9 +91,11 @@ public class TownHallRestFul{
             LOGGER.info("TownHallRestFul: Removing a town hall.");
             townhallejb.removeTownHall(townhallejb.findTownHallbyId(id));
             LOGGER.info("TownHallRestFul: Town hall removed.");
-        } catch (DeleteException | ReadException ex) {
+        } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception removing the town hall.", ex.getMessage());
             throw new InternalServerErrorException(ex);
+        } catch (ReadException ex) {
+            Logger.getLogger(TownHallRestFul.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -116,6 +119,22 @@ public class TownHallRestFul{
             throw new InternalServerErrorException(ex);
         }
     }
+    
+    @GET
+    @Path("th/{locality}")
+    @Produces({MediaType.APPLICATION_XML})
+    public TownHallBean findbyName(@PathParam("locality") String name) {
+        TownHallBean th = null;
+        try {
+            LOGGER.info("TownHallRestFul: Finding a town hall by id.");
+            th = townhallejb.findTownHallbyName(name);
+            LOGGER.info("TownHallRestFul: Town hall found by id.");
+            return th;
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding the town hall by id.", ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
     /**
      * 
      * @return 
@@ -128,10 +147,10 @@ public class TownHallRestFul{
             LOGGER.info("TownHallRestFul: Finding all town halls.");
             townhalls = townhallejb.findAllTownHalls();
             LOGGER.info("TownHallRestFul: All town halls found.");
-            return townhalls;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding all the town halls.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return townhalls;
     }
 }
