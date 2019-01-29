@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name="location", schema="incidapp")
 @XmlRootElement
 @NamedQuery(name="findAllLocations",
-            query="SELECT s FROM LocationBean s")
+        query="SELECT s FROM LocationBean s")
 public class LocationBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

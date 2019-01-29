@@ -38,7 +38,6 @@ public class LocationEJB implements LocationLocal{
     /**
      * 
      * @param location
-     * @return
      * @throws CreateException 
      */
     @Override
@@ -79,10 +78,10 @@ public class LocationEJB implements LocationLocal{
      * @throws DeleteException 
      */
     @Override
-    public void removeLocation(Integer id) throws DeleteException {
+    public void removeLocation(LocationBean location) throws DeleteException {
         try{
             LOGGER.info("LocationEJB: Removing a location.");
-            em.remove(em.merge(id));
+            em.remove(em.merge(location));
             LOGGER.info("LocationEJB: Location removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -93,12 +92,12 @@ public class LocationEJB implements LocationLocal{
 
     /**
      * 
-     * @param location
+     * @param id
      * @return
      * @throws ReadException 
      */
     @Override
-    public LocationBean findLocationbyId(Integer id) throws ReadException {
+    public LocationBean findLocationById(Integer id) throws ReadException {
         LocationBean loc = null;
         try{
             LOGGER.info("LocationEJB: Finding a location by id.");

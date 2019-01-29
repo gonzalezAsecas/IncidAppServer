@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 public interface TypeLocal {
     public List<TypeBean> findAllTypes() throws ReadException;

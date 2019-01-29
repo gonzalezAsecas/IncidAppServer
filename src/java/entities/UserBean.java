@@ -12,6 +12,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="user", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="finAllUsers", 
+@NamedQuery(name="findAllUsers", 
             query="SELECT s FROM UserBean s")
 public class UserBean implements Serializable {
 
@@ -65,13 +66,20 @@ public class UserBean implements Serializable {
     private TownHallBean th;
     @OneToMany(mappedBy="user")
     private List<IncidentBean> incidents;
-    @ManyToMany(mappedBy="users")
+    @ManyToMany(mappedBy="users",fetch=FetchType.EAGER)
     private List<IncidentBean> signatureIncidents;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
     
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     
     public String getLogin() {
         return login;
@@ -135,17 +143,6 @@ public class UserBean implements Serializable {
 
     public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public UserBean() {
     }
 
     public String getDni() {

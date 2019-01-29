@@ -38,7 +38,6 @@ public class TownHallEJB implements TownHallLocal{
     /**
      * 
      * @param townhall
-     * @return
      * @throws CreateException 
      */
     @Override
@@ -79,10 +78,10 @@ public class TownHallEJB implements TownHallLocal{
      * @throws DeleteException 
      */
     @Override
-    public void removeTownHall(Integer id) throws DeleteException {
+    public void removeTownHall(TownHallBean townhall) throws DeleteException {
         try{
             LOGGER.info("TownHallEJB: Removing a town hall.");
-            em.remove(em.merge(id));
+            em.remove(em.merge(townhall));
             LOGGER.info("TownHallEJB: Town hall removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -93,7 +92,7 @@ public class TownHallEJB implements TownHallLocal{
     
     /**
      * 
-     * @param townhall
+     * @param id
      * @return
      * @throws ReadException 
      */
@@ -121,7 +120,7 @@ public class TownHallEJB implements TownHallLocal{
         List<TownHallBean> townhalls = null;
         try{
             LOGGER.info("TownHallEJB: Finding all the town halls.");
-            townhalls = em.createNamedQuery("finsAllTownHalls").getResultList();
+            townhalls = em.createNamedQuery("findAllTownHalls").getResultList();
             LOGGER.info("TownHallEJB: Town halls found.");
             return townhalls;
         }catch(Exception e){

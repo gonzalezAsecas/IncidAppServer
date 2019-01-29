@@ -82,25 +82,26 @@ public class UserRestFul {
     
     /**
      * 
-     * @param user 
+     * @param id 
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("UserRestFul: Removing a user.");
-            userejb.removeUser(id);
+            userejb.removeUser(userejb.findUserById(id));
             LOGGER.info("UserRestFul: User removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception removing the user.", ex.getMessage());
             throw new InternalServerErrorException(ex);
+        } catch (ReadException ex) {
+            Logger.getLogger(UserRestFul.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     /**
      * 
-     * @param user
+     * @param id
      * @return 
      */
     @GET
@@ -110,7 +111,7 @@ public class UserRestFul {
         UserBean us = null;
         try {
             LOGGER.info("UserRestFul: Finding a user by id.");
-            us = userejb.findUserbyId(id);
+            us = userejb.findUserById(id);
             LOGGER.info("UserRestFul: User found by id.");
             return us;
         } catch (ReadException ex) {
@@ -134,39 +135,6 @@ public class UserRestFul {
             return users;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding all the users.", ex.getMessage());
-            throw new InternalServerErrorException(ex);
-        }
-    }
-    //preguntar mañana lo de la contraseña
-    /**
-     * 
-     * @return 
-     */
-    @GET
-    @Path("{Login}")
-    @Produces({MediaType.APPLICATION_XML})
-    public UserBean findUserbyLogin(UserBean user) {
-        try {
-            LOGGER.info("UserRestFul: Finding user by login.");
-            user = userejb.findUserbyLogin(user);
-            LOGGER.info("UserRestFul: User found by login.");
-            return user;
-        } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
-            throw new InternalServerErrorException(ex);
-        }
-    }
-    
-    @GET
-    @Path("password/{Login}")
-    @Produces({MediaType.APPLICATION_XML})
-    public void findUserToChangePassword(UserBean user){
-        try{
-            LOGGER.info("UserRestFul: Finding user by login to change the password.");
-            userejb.findUserToChangePassword(user);
-            LOGGER.info("UserRestFul: User found.");
-        } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
     }

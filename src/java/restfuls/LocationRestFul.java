@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Path("location")
 public class LocationRestFul{
@@ -81,25 +81,26 @@ public class LocationRestFul{
     
     /**
      * 
-     * @param location 
+     * @param id 
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("LocationRestFul: Removing a location.");
-            locationejb.removeLocation(id);
+            locationejb.removeLocation(locationejb.findLocationById(id));
             LOGGER.info("LocationRestFul: Location removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception removing the location.", ex.getMessage());
             throw new InternalServerErrorException(ex);
+        } catch (ReadException ex) {
+            Logger.getLogger(IncidentRestFul.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     /**
      * 
-     * @param location
+     * @param id
      * @return 
      */
     @GET
@@ -109,7 +110,7 @@ public class LocationRestFul{
         LocationBean loc = null;
         try {
             LOGGER.info("LocationRestFul: Finding a location by id.");
-            loc = locationejb.findLocationbyId(id);
+            loc = locationejb.findLocationById(id);
             LOGGER.info("LocationRestFul: Location found by id.");
             return loc;
         } catch (ReadException ex) {
@@ -123,7 +124,6 @@ public class LocationRestFul{
      * @return 
      */
     @GET
-    @Path("findAll")
     @Produces({MediaType.APPLICATION_XML})
     public List<LocationBean> findAll() {
         List<LocationBean> locations = null;

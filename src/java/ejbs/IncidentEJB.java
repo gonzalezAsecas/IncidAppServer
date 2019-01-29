@@ -92,11 +92,12 @@ public class IncidentEJB implements IncidentLocal{
 
     /**
      * 
+     * @param id
      * @return
      * @throws ReadException 
      */
     @Override
-    public IncidentBean findIncidentbyId(Integer id) throws ReadException {
+    public IncidentBean findIncidentById(Integer id) throws ReadException {
         IncidentBean inc = null;
         try{
             LOGGER.info("IncidentEJB: Finding a incident by id.");

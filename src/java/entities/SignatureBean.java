@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 public class SignatureBean implements Serializable {
 
@@ -56,10 +57,10 @@ public class SignatureBean implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.id);
-        hash = 23 * hash + Objects.hashCode(this.idPerson);
-        hash = 23 * hash + Objects.hashCode(this.idIncident);
-        hash = 23 * hash + Objects.hashCode(this.signatureDate);
+        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.idPerson);
+        hash = 83 * hash + Objects.hashCode(this.idIncident);
+        hash = 83 * hash + Objects.hashCode(this.signatureDate);
         return hash;
     }
 

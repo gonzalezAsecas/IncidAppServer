@@ -60,10 +60,14 @@ public class IncidentRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-
+    
+    /**
+     * 
+     * @param incident 
+     */
     @PUT
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, IncidentBean incident) {
+    public void edit(IncidentBean incident) {
         try {
             LOGGER.info("IncidentRestFul: Editting a incident.");
             incidentejb.editIncident(incident);
@@ -73,13 +77,17 @@ public class IncidentRestFul {
             throw new InternalServerErrorException(ex);
         }
     }
-
+    
+    /**
+     * 
+     * @param id 
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("IncidentRestFul: Removing a incident.");
-            incidentejb.removeIncident(incidentejb.findIncidentbyId(id));
+            incidentejb.removeIncident(incidentejb.findIncidentById(id));
             LOGGER.info("IncidentRestFul: incident removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception removing the incident.", ex.getMessage());
@@ -101,7 +109,7 @@ public class IncidentRestFul {
         IncidentBean inc = null;
         try {
             LOGGER.info("IncidentRestFul: Finding a incident by id.");
-            inc = incidentejb.findIncidentbyId(id);
+            inc = incidentejb.findIncidentById(id);
             LOGGER.info("IncidentRestFul: incident found by id.");
             return inc;
         } catch (ReadException ex) {
@@ -122,11 +130,12 @@ public class IncidentRestFul {
             LOGGER.info("IncidentRestFul: Finding all incidents.");
             incidents = incidentejb.findAllIncidents();
             LOGGER.info("IncidentRestFul: All incidents found.");
-            return incidents;
+            
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding all the incidents.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return incidents;
     }
     
 }

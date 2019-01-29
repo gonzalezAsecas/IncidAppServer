@@ -23,7 +23,7 @@ public interface IncidentLocal {
 
     public void removeIncident(IncidentBean incident) throws DeleteException;
 
-    public IncidentBean findIncidentbyId(Integer id) throws ReadException;
+    public IncidentBean findIncidentById(Integer id) throws ReadException;
 
     public List<IncidentBean> findAllIncidents() throws ReadException;
 }

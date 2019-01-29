@@ -76,14 +76,14 @@ public class UserEJB implements UserLocal{
     
     /**
      * 
-     * @param id
+     * @param user
      * @throws DeleteException 
      */
     @Override
-    public void removeUser(Integer id) throws DeleteException {
+    public void removeUser(UserBean user) throws DeleteException {
         try{
             LOGGER.info("UserEJB: Removing a user.");
-            em.remove(em.merge(id));
+            em.remove(em.merge(user));
             LOGGER.info("UserEJB: User removed.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, 
@@ -99,7 +99,7 @@ public class UserEJB implements UserLocal{
      * @throws ReadException 
      */
     @Override
-    public UserBean findUserbyId(Integer id) throws ReadException {
+    public UserBean findUserById(Integer id) throws ReadException {
         UserBean us = null;
         try{
             LOGGER.info("UserEJB: Finding a user by id.");
@@ -122,49 +122,11 @@ public class UserEJB implements UserLocal{
         List<UserBean> users = null;
         try{
             LOGGER.info("UserEJB: Finding all the users.");
-            users = em.createNamedQuery("finsAllUsers").getResultList();
+            users = em.createNamedQuery("findAllUsers").getResultList();
             LOGGER.info("UserEJB: Users found.");
             return users;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the users.", e.getMessage());
-            throw new ReadException(e.getMessage());
-        }
-    }
-    
-    /**
-     * 
-     * @return
-     * @throws ReadException 
-     */
-    @Override
-    public UserBean findUserbyLogin(UserBean user) throws ReadException{
-        UserBean us;
-        String cause = "login";
-        try{
-            LOGGER.info("UserEJB: Finding the user by login.");
-            us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", user.getLogin()).getSingleResult();
-            LOGGER.info("UserEJB: User found.");
-            if(!us.getPassword().equals(user.getPassword())){
-                cause = "password";
-                throw new Exception();
-            }
-            return us;
-        }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
-            throw new ReadException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void findUserToChangePassword(UserBean user) throws ReadException {
-        UserBean us;
-        try{
-            LOGGER.info("UserEJB: Finding user by login for change the password");
-            us = (UserBean) em.createNamedQuery("findUserbyLogin").setParameter("login", user.getLogin()).getSingleResult();
-            LOGGER.info("UserEJB: User found");
-            //TODO cambio contraseña
-        }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "TownHallUserEJB: Exception finding the users.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
     }

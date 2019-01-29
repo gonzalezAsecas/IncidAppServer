@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="townhall", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="finAllTownHalls", 
+@NamedQuery(name="findAllTownHalls", 
             query="SELECT s FROM TownHallBean s")
 public class TownHallBean implements Serializable{
     @Id

@@ -81,25 +81,26 @@ public class TownHallRestFul{
     
     /**
      * 
-     * @param townhall 
+     * @param id 
      */
     @DELETE
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("TownHallRestFul: Removing a town hall.");
-            townhallejb.removeTownHall(id);
+            townhallejb.removeTownHall(townhallejb.findTownHallbyId(id));
             LOGGER.info("TownHallRestFul: Town hall removed.");
         } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception removing the town hall.", ex.getMessage());
             throw new InternalServerErrorException(ex);
+        } catch (ReadException ex) {
+            Logger.getLogger(TownHallRestFul.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     /**
      * 
-     * @param townhall
+     * @param id
      * @return 
      */
     @GET
@@ -117,6 +118,7 @@ public class TownHallRestFul{
             throw new InternalServerErrorException(ex);
         }
     }
+    
     /**
      * 
      * @return 

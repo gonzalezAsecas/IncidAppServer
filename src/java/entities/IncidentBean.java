@@ -10,9 +10,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import static javax.persistence.FetchType.EAGER;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +27,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -59,7 +61,7 @@ public class IncidentBean implements Serializable{
     private LocationBean location;
     @ManyToOne
     private TypeBean type;
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="signature", catalog="incidapp")
     private List<UserBean> users;
     
@@ -152,8 +154,7 @@ public class IncidentBean implements Serializable{
     public void setType(TypeBean type) {
         this.type = type;
     }
-
-    @XmlTransient
+    
     public List<UserBean> getUsers() {
         return users;
     }
