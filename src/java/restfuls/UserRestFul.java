@@ -25,7 +25,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -35,20 +34,20 @@ import javax.xml.bind.DatatypeConverter;
 public class UserRestFul {
 
     /**
-     * 
+     * The server logger
      */
     private static final Logger LOGGER = Logger.getLogger("javafxserverside");
     
     /**
-     * 
+     * The user´s ejb injected
      */
     @EJB
     private UserLocal userejb;
 
     
     /**
-     * 
-     * @param user 
+     * The method for create an user
+     * @param user the user is going to be created
      */
     @POST
     @Consumes({MediaType.APPLICATION_XML})
@@ -64,15 +63,17 @@ public class UserRestFul {
     }
     
     /**
-     * 
-     * @param user 
+     * The method for modify an user
+     * @param user the user is going to be modified 
+     * @param pass 
      */
     @PUT
+    @Path("{pass}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(UserBean user) {
+    public void edit(UserBean user, @PathParam("pass") Boolean pass) {
         try {
             LOGGER.info("UserRestFul: Editting a user.");
-            userejb.editUser(user);
+            userejb.editUser(user, pass);
             LOGGER.info("UserRestFul: User edited.");
         } catch (UpdateException ex) {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception editting the user.", ex.getMessage());
@@ -81,8 +82,8 @@ public class UserRestFul {
     }
     
     /**
-     * 
-     * @param id
+     * The method for remove an user
+     * @param id the id of the user is going to be deleted
      */
     @DELETE
     @Path("{id}")
@@ -98,9 +99,9 @@ public class UserRestFul {
     }
     
     /**
-     * 
-     * @param id
-     * @return 
+     * the method for find an user by id
+     * @param id the id of the user
+     * @return the user if it is found
      */
     @GET
     @Path("{id}")
@@ -119,8 +120,8 @@ public class UserRestFul {
     }
     
     /**
-     * 
-     * @return 
+     * The method for find all the users
+     * @return all the users in the database
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -138,10 +139,10 @@ public class UserRestFul {
     }
     
     /**
-     * 
-     * @param login
-     * @param password
-     * @return 
+     * The method for find an user by it login
+     * @param login the login of the user
+     * @param password the password of the user encrypted
+     * @return the user found
      */
     @GET
     @Path("{login}/{password}")
@@ -160,6 +161,11 @@ public class UserRestFul {
         }
     }
     
+    /**
+     * The method for change user's password
+     * @param login the login of the user
+     * @return the user found
+     */
     @GET
     @Path("passwordChange/{login}")
     @Produces({MediaType.APPLICATION_XML})

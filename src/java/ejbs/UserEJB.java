@@ -106,13 +106,18 @@ public class UserEJB implements UserLocal{
      * @throws UpdateException when there is a problem modifying the user
      */
     @Override
-    public void editUser(UserBean user) throws UpdateException {
+    public void editUser(UserBean user, Boolean pass) throws UpdateException {
         try{
             LOGGER.info("UserEJB: Editting a user.");
             //merge the state of the user into the persistent context
             em.merge(user);
             //synchronize the persistent context
             em.flush();
+            if(pass){
+                sendEmail(this.decryptData("email.data"),
+                        this.decryptData("pwd.data"),
+                        user.getEmail(), "", false);
+            }
             LOGGER.info("UserEJB: User updated.");
         //if any problem have ocurred
         }catch(Exception e){
@@ -123,14 +128,15 @@ public class UserEJB implements UserLocal{
     }
     
     /**
-     * 
-     * @param user
-     * @throws DeleteException 
+     * Remove the user from the database
+     * @param user the user is going to be removed
+     * @throws DeleteException if there are any problem deleting the user
      */
     @Override
     public void removeUser(UserBean user) throws DeleteException {
         try{
             LOGGER.info("UserEJB: Removing a user.");
+            //remove the user and merge the state of the user into the persistence context
             em.remove(em.merge(user));
             LOGGER.info("UserEJB: User removed.");
         }catch(Exception e){
@@ -141,16 +147,17 @@ public class UserEJB implements UserLocal{
     }
 
     /**
-     * 
-     * @param id
-     * @return
-     * @throws ReadException 
+     * Find user by id
+     * @param id the id of the user
+     * @return the user found
+     * @throws ReadException if there are any problem finding the user
      */
     @Override
     public UserBean findUserbyId(Integer id) throws ReadException {
         UserBean us = null;
         try{
             LOGGER.info("UserEJB: Finding a user by id.");
+            //find the user
             us = em.find(UserBean.class, id);
             LOGGER.info("UserEJB: User found by id.");
             return us;
@@ -161,15 +168,16 @@ public class UserEJB implements UserLocal{
     }
     
     /**
-     * 
-     * @return
-     * @throws ReadException 
+     * find all the users
+     * @return a list of users
+     * @throws ReadException if there are any problem finding all the users
      */
     @Override
     public List<UserBean> findAllUsers() throws ReadException {
         List<UserBean> users = null;
         try{
             LOGGER.info("UserEJB: Finding all the users.");
+            //create the query and get the list of users
             users = em.createNamedQuery("findAllUsers").getResultList();
             LOGGER.info("UserEJB: Users found.");
             return users;
@@ -181,38 +189,45 @@ public class UserEJB implements UserLocal{
     }
     
     /**
-     * 
-     * @return
-     * @throws ReadException 
+     * find users by login and verify that the password are the same
+     * @param login the login of the user
+     * @param password the password of the user
+     * @return the user found
+     * @throws ReadException if there are any problem finding the user
      */
     @Override
     public UserBean findUserbyLogin(String login, String password) throws ReadException{
         UserBean user = new UserBean();
         UserBean us;
         try {
+            //set the login
             user.setLogin(login);
+            //set the password converting from Hexadecimal string to binary, 
+            //decrypting and hashing it
             user.setPassword(this.hashPassword(this.decryptPassword(
                     DatatypeConverter.parseHexBinary(password))));
             LOGGER.info("UserEJB: Finding the user by login.");
+            //create he query, set the login as parameter and get the result
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
                     .setParameter("login", user.getLogin()).getSingleResult();
             LOGGER.info("UserEJB: User found.");
+            //verify that the paswords are the same
             if(!MessageDigest.isEqual(user.getPassword(), us.getPassword())){
-            //if(!user.getPassword().equals(us.getPassword())){
                 throw new Exception();
             }
             return us;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the user.", e.getMessage());
-            e.printStackTrace();
             throw new ReadException(e.getMessage());
         }
     }
     
     /**
-     * 
-     * @param login
-     * @throws ReadException 
+     * find user to change password, create a neew and random password, send 
+     * it to her email and save the new password
+     * @param login of the user is asking the password change
+     * @return the user that have change the password
+     * @throws ReadException if there are any problem changing the password
      */
     @Override
     public UserBean findUserToChangePassword(String login) throws ReadException {
@@ -223,19 +238,27 @@ public class UserEJB implements UserLocal{
         String newPassword = "";
         try{
             LOGGER.info("UserEJB: Finding user by login for change the password");
+            //find the user by login
             us = (UserBean) em.createNamedQuery("findUserbyLogin")
                     .setParameter("login", login).getSingleResult();
             LOGGER.info("UserEJB: User found");
+            //if the user exist
             if(us != null){
+                //get instance for the secure random
                 random = SecureRandom.getInstance("SHA1PRNG");
+                //generate a password of a lenght of 10 characters
                 for(int i=0; i<10; i++){
+                    //generate a random character from the array
                     newPassword+=symbols[random.nextInt(symbols.length)];
                 }
+                //send the email
                 sendEmail(this.decryptData("email.data"),
                         this.decryptData("pwd.data"),
                         us.getEmail(), newPassword, true);
+                //save the password hashing it
                 us.setPassword(hashPassword(newPassword.getBytes()));
-                this.editUser(us);
+                //save the modified user
+                this.editUser(us, false);
             }
             return us;
         }catch(Exception e){
@@ -291,9 +314,9 @@ public class UserEJB implements UserLocal{
     }
     
     /**
-     *
-     * @param password
-     * @return
+     * Hash the password for save in the database
+     * @param password the password i going to be hashed
+     * @return the password hashed
      */
     private byte[] hashPassword(byte[] password) throws Exception {
         MessageDigest md;
@@ -313,10 +336,10 @@ public class UserEJB implements UserLocal{
         }
     }
     /**
-     * 
-     * @param path
-     * @return
-     * @throws Exception 
+     * read and decrypt the data of a file
+     * @param path the fil is going to be readed and decrypted
+     * @return the data of the file
+     * @throws Exception if there are any problems in the decryption of the data
      */
     private String decryptData(String path) throws Exception{
         File file;
@@ -349,38 +372,38 @@ public class UserEJB implements UserLocal{
     }
     
     /**
-     * 
-     * @param email
-     * @param newPassword 
+     * Send a email to the user
+     * @param path the email is going to send the email
+     * @param password the password of that email
+     * @param userEmail the user email
+     * @param newPassword the new password of the user
+     * @param pass if it is from a modify or password  
      */
     private void sendEmail(String path, String password, String userEmail, String newPassword, boolean pass) throws Exception {
         Email email;
         try{
-            LOGGER.info(path);
-            LOGGER.info(password);
-            LOGGER.info(userEmail);
-            //path="jampdesarrollo@gmail.com";
-            //password="abcd*1234";
-            //userEmail="jonasecas97@gmail.com";
             email = new SimpleEmail();
-            //email.setHostName(properties.getString("hostName"));
+            //set the hostname
             email.setHostName("smtp.googlemail.com");
-            //email.setSmtpPort(Integer.getInteger(properties.getString("port")));
-            //email.setSmtpPort(465);
-            email.setSmtpPort(587);
+            //set the port
+            email.setSmtpPort(Integer.parseInt(properties.getString("emailPort")));
+            //set the email and the password for authentication
             email.setAuthentication(path, password);
+            //set TLS enabled
             email.setStartTLSEnabled(true);
-            //email.setSSLOnConnect(true);
-            //email.setDebug(true);
-            //email.setTLS(true);
+            //set the name of the sent email
             email.setFrom(path);
+            //set a subject
             email.setSubject("IncidApp: Your password have changed");
+            //set the mesage
             if(pass){
                 email.setMsg("Today, "+ LocalDate.now().toString() + ", your password has been changed and now is " + newPassword + ".");
             }else{
                 email.setMsg("You have change your password today. " + LocalDate.now().toString());
             }
+            //set the user email
             email.addTo(userEmail);
+            //send the email
             email.send();
        }catch(EmailException ex){
             LOGGER.log(Level.SEVERE, "", ex);
