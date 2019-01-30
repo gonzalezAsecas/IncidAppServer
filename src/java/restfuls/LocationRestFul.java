@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Path("location")
 public class LocationRestFul{
@@ -81,45 +81,47 @@ public class LocationRestFul{
     
     /**
      * 
-     * @param location 
+     * @param id 
      */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         try {
             LOGGER.info("LocationRestFul: Removing a location.");
-            locationejb.removeLocation(locationejb.findLocationbyId(id));
+            locationejb.removeLocation(locationejb.findLocationById(id));
             LOGGER.info("LocationRestFul: Location removed.");
-        } catch (DeleteException | ReadException ex) {
+        } catch (DeleteException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception removing the location.", ex.getMessage());
             throw new InternalServerErrorException(ex);
+        } catch (ReadException ex) {
+            Logger.getLogger(IncidentRestFul.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     /**
      * 
      * @param id
-     * @return 
+     * @return location
      */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     public LocationBean find(@PathParam("id") Integer id) {
-        LocationBean loc = null;
+        LocationBean location = null;
         try {
             LOGGER.info("LocationRestFul: Finding a location by id.");
-            loc = locationejb.findLocationbyId(id);
+            location = locationejb.findLocationById(id);
             LOGGER.info("LocationRestFul: Location found by id.");
-            return loc;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception finding the location by id.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return location;
     }
     
     /**
      * 
-     * @return 
+     * @return locations
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -129,10 +131,10 @@ public class LocationRestFul{
             LOGGER.info("LocationRestFul: Finding all locations.");
             locations = locationejb.findAllLocations();
             LOGGER.info("LocationRestFul: All locations found.");
-            return locations;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "LocationRestFul: Exception finding all the locations.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return locations;
     }
 }

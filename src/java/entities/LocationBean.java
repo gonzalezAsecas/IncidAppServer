@@ -22,13 +22,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Entity
 @Table(name="location", schema="incidapp")
 @XmlRootElement
 @NamedQuery(name="findAllLocations",
-            query="SELECT s FROM LocationBean s")
+        query="SELECT s FROM LocationBean s")
 public class LocationBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,11 +77,11 @@ public class LocationBean implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        hash = 83 * hash + Objects.hashCode(this.street);
-        hash = 83 * hash + Objects.hashCode(this.townHall);
-        hash = 83 * hash + Objects.hashCode(this.incidents);
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 41 * hash + Objects.hashCode(this.street);
+        hash = 41 * hash + Objects.hashCode(this.townHall);
+        hash = 41 * hash + Objects.hashCode(this.incidents);
         return hash;
     }
 

@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +13,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,16 +25,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Entity
 @Table(name="incident", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="findAllIncidents", query="SELECT s FROM IncidentBean s")
+@NamedQuery(name="findAllIncidents",
+    query="SELECT s FROM IncidentBean s")
 public class IncidentBean implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,7 +59,7 @@ public class IncidentBean implements Serializable{
     private LocationBean location;
     @ManyToOne
     private TypeBean type;
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="signature", catalog="incidapp")
     private List<UserBean> users;
     
@@ -152,8 +152,7 @@ public class IncidentBean implements Serializable{
     public void setType(TypeBean type) {
         this.type = type;
     }
-
-    @XmlTransient
+    
     public List<UserBean> getUsers() {
         return users;
     }
@@ -164,19 +163,19 @@ public class IncidentBean implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 11 * hash + Objects.hashCode(this.id);
-        hash = 11 * hash + Objects.hashCode(this.title);
-        hash = 11 * hash + Arrays.hashCode(this.photo);
-        hash = 11 * hash + Objects.hashCode(this.description);
-        hash = 11 * hash + Objects.hashCode(this.comment);
-        hash = 11 * hash + Objects.hashCode(this.createDate);
-        hash = 11 * hash + Objects.hashCode(this.endDate);
-        hash = 11 * hash + Objects.hashCode(this.estate);
-        hash = 11 * hash + Objects.hashCode(this.user);
-        hash = 11 * hash + Objects.hashCode(this.location);
-        hash = 11 * hash + Objects.hashCode(this.type);
-        hash = 11 * hash + Objects.hashCode(this.users);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.title);
+        hash = 17 * hash + Arrays.hashCode(this.photo);
+        hash = 17 * hash + Objects.hashCode(this.description);
+        hash = 17 * hash + Objects.hashCode(this.comment);
+        hash = 17 * hash + Objects.hashCode(this.createDate);
+        hash = 17 * hash + Objects.hashCode(this.endDate);
+        hash = 17 * hash + Objects.hashCode(this.estate);
+        hash = 17 * hash + Objects.hashCode(this.user);
+        hash = 17 * hash + Objects.hashCode(this.location);
+        hash = 17 * hash + Objects.hashCode(this.type);
+        hash = 17 * hash + Objects.hashCode(this.users);
         return hash;
     }
 
@@ -233,6 +232,6 @@ public class IncidentBean implements Serializable{
 
     @Override
     public String toString() {
-        return "IncidentBean{" + "idIncident=" + id + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
+        return "IncidentBean{" + "id=" + id + ", title=" + title + ", photo=" + photo + ", description=" + description + ", comment=" + comment + ", createDate=" + createDate + ", endDate=" + endDate + ", estate=" + estate + ", user=" + user + ", location=" + location + ", type=" + type + ", users=" + users + '}';
     }
 }
