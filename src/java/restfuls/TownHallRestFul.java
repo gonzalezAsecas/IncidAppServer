@@ -43,7 +43,6 @@ public class TownHallRestFul{
      */
     @EJB
     private TownHallLocal townhallejb;
-
     
     /**
      * 
@@ -57,6 +56,7 @@ public class TownHallRestFul{
             townhallejb.createTownHall(townhall);
             LOGGER.info("TownHallRestFul: Town hall added.");
         } catch (CreateException ex) {
+            ex.printStackTrace();
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception adding the town hall.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -81,7 +81,7 @@ public class TownHallRestFul{
     
     /**
      * 
-     * @param id 
+     * @param id
      */
     @DELETE
     @Path("{id}")
@@ -121,6 +121,27 @@ public class TownHallRestFul{
     
     /**
      * 
+     * @param name
+     * @return 
+     */
+    @GET
+    @Path("th/{locality}")
+    @Produces({MediaType.APPLICATION_XML})
+    public TownHallBean find(@PathParam("locality") String name) {
+        TownHallBean th = null;
+        try {
+            LOGGER.info("TownHallRestFul: Finding a town hall by id.");
+            th = townhallejb.findTownHallbyName(name);
+            LOGGER.info("TownHallRestFul: Town hall found by id.");
+            return th;
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding the town hall by id.", ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
+    
+    /**
+     * 
      * @return 
      */
     @GET
@@ -131,10 +152,10 @@ public class TownHallRestFul{
             LOGGER.info("TownHallRestFul: Finding all town halls.");
             townhalls = townhallejb.findAllTownHalls();
             LOGGER.info("TownHallRestFul: All town halls found.");
-            return townhalls;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding all the town halls.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return townhalls;
     }
 }

@@ -38,7 +38,7 @@ public class TypeRestFul{
     
     /**
      * 
-     * @return 
+     * @return types
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -48,10 +48,10 @@ public class TypeRestFul{
             LOGGER.info("TypeRestFul: Finding all types.");
             types = typeejb.findAllTypes();
             LOGGER.info("TypeRestFul: All types found.");
-            return types;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "TypeRestFul: Exception finding all the types.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return types;
     }
 }

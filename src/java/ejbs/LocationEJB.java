@@ -19,7 +19,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Stateless
 public class LocationEJB implements LocationLocal{
@@ -93,26 +93,26 @@ public class LocationEJB implements LocationLocal{
     /**
      * 
      * @param id
-     * @return
+     * @return location
      * @throws ReadException 
      */
     @Override
     public LocationBean findLocationById(Integer id) throws ReadException {
-        LocationBean loc = null;
+        LocationBean location = null;
         try{
             LOGGER.info("LocationEJB: Finding a location by id.");
-            loc = em.find(LocationBean.class, id);
+            location = em.find(LocationBean.class, id);
             LOGGER.info("LocationEJB: Location found by id.");
-            return loc;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "LocationEJB: Exception finding the location by id.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
+        return location;
     }
 
     /**
      * 
-     * @return
+     * @return locations
      * @throws ReadException 
      */
     @Override
@@ -122,11 +122,10 @@ public class LocationEJB implements LocationLocal{
             LOGGER.info("LocationEJB: Finding all the locations.");
             locations = em.createNamedQuery("findAllLocations").getResultList();
             LOGGER.info("LocationEJB: Locations found.");
-            return locations;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "LocationEJB: Exception finding the locations.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
+        return locations;
     }
-    
 }

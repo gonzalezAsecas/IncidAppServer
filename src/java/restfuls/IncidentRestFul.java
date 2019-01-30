@@ -100,27 +100,27 @@ public class IncidentRestFul {
     /**
      * 
      * @param id
-     * @return 
+     * @return incident
      */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     public IncidentBean find(@PathParam("id") Integer id) {
-        IncidentBean inc = null;
+        IncidentBean incident = null;
         try {
             LOGGER.info("IncidentRestFul: Finding a incident by id.");
-            inc = incidentejb.findIncidentById(id);
+            incident = incidentejb.findIncidentById(id);
             LOGGER.info("IncidentRestFul: incident found by id.");
-            return inc;
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding the incident by id.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
+        return incident;
     }
     
     /**
      * 
-     * @return 
+     * @return incidents
      */
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -130,7 +130,6 @@ public class IncidentRestFul {
             LOGGER.info("IncidentRestFul: Finding all incidents.");
             incidents = incidentejb.findAllIncidents();
             LOGGER.info("IncidentRestFul: All incidents found.");
-            
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "IncidentRestFul: Exception finding all the incidents.", ex.getMessage());
             throw new InternalServerErrorException(ex);

@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Gorka Redondo
  */
 @Entity
 @Table(name="type", schema="incidapp")

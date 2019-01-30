@@ -95,13 +95,13 @@ public class TownHallBean implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.locality);
-        hash = 97 * hash + Objects.hashCode(this.email);
-        hash = 97 * hash + Objects.hashCode(this.telephoneNumber);
-        hash = 97 * hash + Objects.hashCode(this.locations);
-        hash = 97 * hash + Objects.hashCode(this.users);
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.locality);
+        hash = 71 * hash + Objects.hashCode(this.email);
+        hash = 71 * hash + Objects.hashCode(this.telephoneNumber);
+        hash = 71 * hash + Objects.hashCode(this.locations);
+        hash = 71 * hash + Objects.hashCode(this.users);
         return hash;
     }
 

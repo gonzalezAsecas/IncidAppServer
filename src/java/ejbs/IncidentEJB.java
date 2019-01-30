@@ -93,26 +93,26 @@ public class IncidentEJB implements IncidentLocal{
     /**
      * 
      * @param id
-     * @return
+     * @return incident
      * @throws ReadException 
      */
     @Override
     public IncidentBean findIncidentById(Integer id) throws ReadException {
-        IncidentBean inc = null;
+        IncidentBean incident = null;
         try{
             LOGGER.info("IncidentEJB: Finding a incident by id.");
-            inc = em.find(IncidentBean.class, id);
+            incident = em.find(IncidentBean.class, id);
             LOGGER.info("IncidentEJB: incident found by id.");
-            return inc;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "IncidentEJB: Exception finding the incident by id.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
+        return incident;
     }
 
     /**
      * 
-     * @return
+     * @return incidents
      * @throws ReadException 
      */
     @Override
@@ -121,11 +121,11 @@ public class IncidentEJB implements IncidentLocal{
         try{
             LOGGER.info("IncidentEJB: Finding all the incidents.");
             incidents = em.createNamedQuery("findAllIncidents").getResultList();
-            LOGGER.info("IncidentEJB: incidents found.");
-            return incidents;
+            LOGGER.info("IncidentEJB: All incidents found.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "IncidentEJB: Exception finding the incidents.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
+        return incidents;
     }
 }

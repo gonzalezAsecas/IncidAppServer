@@ -6,18 +6,19 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -33,8 +34,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="user", schema="incidapp")
 @XmlRootElement
-@NamedQuery(name="findAllUsers", 
-            query="SELECT s FROM UserBean s")
+@NamedQueries({@NamedQuery(
+                name="findAllUsers", 
+                query="SELECT s FROM UserBean s"),
+               @NamedQuery(
+                name="findUserbyLogin", 
+                query="SELECT s FROM UserBean s WHERE s.login = :login")
+})
 public class UserBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +52,7 @@ public class UserBean implements Serializable {
     @NotNull
     private String email;
     @NotNull
-    private String password;
+    private byte[] password;
     private String fullName;
     @NotNull
     @Enumerated(EnumType.ORDINAL)
@@ -66,20 +72,13 @@ public class UserBean implements Serializable {
     private TownHallBean th;
     @OneToMany(mappedBy="user")
     private List<IncidentBean> incidents;
-    @ManyToMany(mappedBy="users",fetch=FetchType.EAGER)
+    @ManyToMany(mappedBy="users")
     private List<IncidentBean> signatureIncidents;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
     
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
     
     public String getLogin() {
         return login;
@@ -89,11 +88,11 @@ public class UserBean implements Serializable {
         this.login = login;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 
@@ -145,6 +144,17 @@ public class UserBean implements Serializable {
         this.lastPasswordChange = lastPasswordChange;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public UserBean() {
+    }
+
     public String getDni() {
         return dni;
     }
@@ -189,21 +199,21 @@ public class UserBean implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        hash = 37 * hash + Objects.hashCode(this.login);
-        hash = 37 * hash + Objects.hashCode(this.email);
-        hash = 37 * hash + Objects.hashCode(this.password);
-        hash = 37 * hash + Objects.hashCode(this.fullName);
-        hash = 37 * hash + Objects.hashCode(this.status);
-        hash = 37 * hash + Objects.hashCode(this.privilege);
-        hash = 37 * hash + Objects.hashCode(this.lastAccess);
-        hash = 37 * hash + Objects.hashCode(this.lastPasswordChange);
-        hash = 37 * hash + Objects.hashCode(this.dni);
-        hash = 37 * hash + Objects.hashCode(this.street);
-        hash = 37 * hash + Objects.hashCode(this.th);
-        hash = 37 * hash + Objects.hashCode(this.incidents);
-        hash = 37 * hash + Objects.hashCode(this.signatureIncidents);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(this.login);
+        hash = 89 * hash + Objects.hashCode(this.email);
+        hash = 89 * hash + Arrays.hashCode(this.password);
+        hash = 89 * hash + Objects.hashCode(this.fullName);
+        hash = 89 * hash + Objects.hashCode(this.status);
+        hash = 89 * hash + Objects.hashCode(this.privilege);
+        hash = 89 * hash + Objects.hashCode(this.lastAccess);
+        hash = 89 * hash + Objects.hashCode(this.lastPasswordChange);
+        hash = 89 * hash + Objects.hashCode(this.dni);
+        hash = 89 * hash + Objects.hashCode(this.street);
+        hash = 89 * hash + Objects.hashCode(this.th);
+        hash = 89 * hash + Objects.hashCode(this.incidents);
+        hash = 89 * hash + Objects.hashCode(this.signatureIncidents);
         return hash;
     }
 
@@ -225,9 +235,6 @@ public class UserBean implements Serializable {
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
-        if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
         if (!Objects.equals(this.fullName, other.fullName)) {
             return false;
         }
@@ -238,6 +245,9 @@ public class UserBean implements Serializable {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Arrays.equals(this.password, other.password)) {
             return false;
         }
         if (this.status != other.status) {
