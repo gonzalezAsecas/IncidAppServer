@@ -28,9 +28,9 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Jon Gonzalez
+ * @author Lander Lluvia
  */
-@Path("townhall")
+@Path("townhall/th")
 public class TownHallRestFul{
 
     /**
@@ -119,15 +119,10 @@ public class TownHallRestFul{
         }
     }
     
-    /**
-     * 
-     * @param name
-     * @return 
-     */
     @GET
     @Path("th/{locality}")
     @Produces({MediaType.APPLICATION_XML})
-    public TownHallBean find(@PathParam("locality") String name) {
+    public TownHallBean findbyName(@PathParam("locality") String name) {
         TownHallBean th = null;
         try {
             LOGGER.info("TownHallRestFul: Finding a town hall by id.");
@@ -139,7 +134,6 @@ public class TownHallRestFul{
             throw new InternalServerErrorException(ex);
         }
     }
-    
     /**
      * 
      * @return 

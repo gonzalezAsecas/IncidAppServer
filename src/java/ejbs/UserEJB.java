@@ -335,7 +335,6 @@ public class UserEJB implements UserLocal{
             throw new Exception(ex);
         }
     }
-    
     /**
      * read and decrypt the data of a file
      * @param path the fil is going to be readed and decrypted

@@ -48,6 +48,7 @@ public class TownHallEJB implements TownHallLocal{
             em.persist(townhall);
             LOGGER.info("TownHallEJB: Townhall added.");
         }catch(Exception e){
+            e.printStackTrace();
             LOGGER.log(Level.SEVERE,
                     "TownHallEJB: Exception adding the townhall.", e.getMessage());
             throw new CreateException(e.getMessage());
@@ -117,6 +118,9 @@ public class TownHallEJB implements TownHallLocal{
         try{
             LOGGER.info("TownHallEJB: Finding a town hall by name.");
             townHall = em.find(TownHallBean.class, name);
+            
+            townHall = (TownHallBean) em.createNamedQuery("findTownHallbyName")
+                    .setParameter("locality", name).getSingleResult();
             LOGGER.info("TownHallEJB: Town hall found by name.");
             return townHall;
         }catch(Exception e){
