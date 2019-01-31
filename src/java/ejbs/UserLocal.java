@@ -26,21 +26,21 @@ public interface UserLocal {
      * @return the user inself
      * @throws CreateException when there is a problem creating the user
      */
-    //public UserBean createUser(UserBean user) throws CreateException;
+    public UserBean createUser(UserBean user) throws CreateException;
 
     /**
      * Merge the state of the current user and synchronized the persistent context
      * @param user the user for modify it
      * @throws UpdateException when there is a problem modifying the user
      */
-    //public void editUser(UserBean user, Boolean pass) throws UpdateException;
+    public void editUser(UserBean user, Boolean pass) throws UpdateException;
     
     /**
      * Remove the user from the database
      * @param user the user is going to be removed
      * @throws DeleteException if there are any problem deleting the user
      */
-    //public void removeUser(UserBean user) throws DeleteException;
+    public void removeUser(UserBean user) throws DeleteException;
     
     /**
      * Find user by id
@@ -64,7 +64,7 @@ public interface UserLocal {
      * @return the user found
      * @throws ReadException if there are any problem finding the user
      */
-    //public UserBean findUserbyLogin(String login, String password) throws ReadException;
+    public UserBean findUserbyLogin(String login, String password) throws ReadException;
     
     /**
      * find user to change password, create a neew and random password, send 
@@ -73,5 +73,5 @@ public interface UserLocal {
      * @return the user that have change the password
      * @throws ReadException if there are any problem changing the password
      */
-    //public UserBean findUserToChangePassword(String login) throws ReadException;
+    public UserBean findUserToChangePassword(String login) throws ReadException;
 }

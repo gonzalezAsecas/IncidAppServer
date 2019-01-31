@@ -44,9 +44,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.bind.DatatypeConverter;
-//import org.apache.commons.mail.Email;
-//import org.apache.commons.mail.EmailException;
-//import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 
 /**
  * The user ejb for communication with the entity manager.
@@ -71,8 +71,8 @@ public class UserEJB implements UserLocal{
     /**
      * The resource bundle properties for read the properties file
      */
-    /*ResourceBundle properties = ResourceBundle
-                .getBundle("properties/Properties");*/
+    ResourceBundle properties = ResourceBundle
+                .getBundle("properties/Properties");
     
     /**
      * Create an user in the database decrypting and hashing the password
@@ -80,7 +80,7 @@ public class UserEJB implements UserLocal{
      * @return the user inself
      * @throws CreateException when there is a problem creating the user
      */
-    /*@Override
+    @Override
     public UserBean createUser(UserBean user) throws CreateException {
         try{
             //hash and decrypt the password and set into the user
@@ -98,14 +98,14 @@ public class UserEJB implements UserLocal{
                     "UserEJB: Exception adding the user.", e.getMessage());
             throw new CreateException(e.getMessage());
         }
-    }*/
+    }
     
     /**
      * Merge the state of the current user and synchronized the persistent context
      * @param user the user for modify it
      * @throws UpdateException when there is a problem modifying the user
      */
-    /*@Override
+    @Override
     public void editUser(UserBean user, Boolean pass) throws UpdateException {
         try{
             LOGGER.info("UserEJB: Editting a user.");
@@ -125,14 +125,14 @@ public class UserEJB implements UserLocal{
                     "UserEJB: Exception updating the user.", e.getMessage());
             throw new UpdateException(e.getMessage());
         }
-    }*/
+    }
     
     /**
      * Remove the user from the database
      * @param user the user is going to be removed
      * @throws DeleteException if there are any problem deleting the user
      */
-    /*@Override
+    @Override
     public void removeUser(UserBean user) throws DeleteException {
         try{
             LOGGER.info("UserEJB: Removing a user.");
@@ -144,7 +144,7 @@ public class UserEJB implements UserLocal{
                     "UserEJB: Exception removing the user.", e.getMessage());
             throw new DeleteException(e.getMessage());
         }
-    }*/
+    }
 
     /**
      * Find user by id
@@ -195,7 +195,7 @@ public class UserEJB implements UserLocal{
      * @return the user found
      * @throws ReadException if there are any problem finding the user
      */
-    /*@Override
+    @Override
     public UserBean findUserbyLogin(String login, String password) throws ReadException{
         UserBean user = new UserBean();
         UserBean us;
@@ -220,7 +220,7 @@ public class UserEJB implements UserLocal{
             LOGGER.log(Level.SEVERE, "UserEJB: Exception finding the user.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
-    }*/
+    }
     
     /**
      * find user to change password, create a neew and random password, send 
@@ -229,7 +229,7 @@ public class UserEJB implements UserLocal{
      * @return the user that have change the password
      * @throws ReadException if there are any problem changing the password
      */
-    /*@Override
+    @Override
     public UserBean findUserToChangePassword(String login) throws ReadException {
         UserBean us = new UserBean();
         SecureRandom random;
@@ -266,14 +266,14 @@ public class UserEJB implements UserLocal{
                     "UserEJB: Exception finding the user to change the password.", e.getMessage());
             throw new ReadException(e.getMessage());
         }
-    }*/
+    }
     
     /**
      * Decrypt the password with the rsa algorithm
      * @param password the password encrypted
      * @return the password decrypted
      */
-    /*private byte[] decryptPassword(byte[] password) throws Exception{
+    private byte[] decryptPassword(byte[] password) throws Exception{
         FileInputStream fis;
         byte[] key;
         KeyFactory keyFactory;
@@ -311,14 +311,14 @@ public class UserEJB implements UserLocal{
             LOGGER.log(Level.SEVERE, "Exception decrypting the password", ex);
             throw new Exception(ex);
         }
-    }*/
+    }
     
     /**
      * Hash the password for save in the database
      * @param password the password i going to be hashed
      * @return the password hashed
      */
-    /*private byte[] hashPassword(byte[] password) throws Exception {
+    private byte[] hashPassword(byte[] password) throws Exception {
         MessageDigest md;
         try {
             LOGGER.info("UserEJB: Hashing the password");
@@ -334,7 +334,7 @@ public class UserEJB implements UserLocal{
             LOGGER.log(Level.SEVERE, "Exception hashing the password", ex);
             throw new Exception(ex);
         }
-    }*/
+    }
     
     /**
      * read and decrypt the data of a file
@@ -342,7 +342,7 @@ public class UserEJB implements UserLocal{
      * @return the data of the file
      * @throws Exception if there are any problems in the decryption of the data
      */
-    /*private String decryptData(String path) throws Exception{
+    private String decryptData(String path) throws Exception{
         File file;
         FileInputStream fis;
         ObjectInputStream ois;
@@ -370,7 +370,7 @@ public class UserEJB implements UserLocal{
             LOGGER.log(Level.SEVERE, "", ex);
             throw new Exception(ex);
         }
-    }*/
+    }
     
     /**
      * Send a email to the user
@@ -380,7 +380,7 @@ public class UserEJB implements UserLocal{
      * @param newPassword the new password of the user
      * @param pass if it is from a modify or password  
      */
-    /*private void sendEmail(String path, String password, String userEmail, String newPassword, boolean pass) throws Exception {
+    private void sendEmail(String path, String password, String userEmail, String newPassword, boolean pass) throws Exception {
         Email email;
         try{
             email = new SimpleEmail();
@@ -410,5 +410,5 @@ public class UserEJB implements UserLocal{
             LOGGER.log(Level.SEVERE, "", ex);
             throw new Exception(ex);
         }
-    }*/
+    }
 }

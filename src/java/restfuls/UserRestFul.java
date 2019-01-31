@@ -49,7 +49,7 @@ public class UserRestFul {
      * The method for create an user
      * @param user the user is going to be created
      */
-    /*@POST
+    @POST
     @Consumes({MediaType.APPLICATION_XML})
     public void create(UserBean user) {
         try {
@@ -60,14 +60,14 @@ public class UserRestFul {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception adding the user.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
-    }*/
+    }
     
     /**
      * The method for modify an user
      * @param user the user is going to be modified 
      * @param pass 
      */
-    /*@PUT
+    @PUT
     @Path("{pass}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(UserBean user, @PathParam("pass") Boolean pass) {
@@ -79,13 +79,13 @@ public class UserRestFul {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception editting the user.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
-    }*/
+    }
     
     /**
      * The method for remove an user
      * @param id the id of the user is going to be deleted
      */
-    /*@DELETE
+    @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         try {
@@ -96,7 +96,7 @@ public class UserRestFul {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception removing the user.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
-    }*/
+    }
     
     /**
      * the method for find an user by id
@@ -144,7 +144,7 @@ public class UserRestFul {
      * @param password the password of the user encrypted
      * @return the user found
      */
-    /*@GET
+    @GET
     @Path("{login}/{password}")
     @Consumes({MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML})
@@ -159,14 +159,14 @@ public class UserRestFul {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
-    }*/
+    }
     
     /**
      * The method for change user's password
      * @param login the login of the user
      * @return the user found
      */
-    /*@GET
+    @GET
     @Path("passwordChange/{login}")
     @Produces({MediaType.APPLICATION_XML})
     public UserBean findUserToChangePassword(@PathParam("login")String login){
@@ -180,5 +180,5 @@ public class UserRestFul {
             LOGGER.log(Level.SEVERE, "UserRestFul: Exception finding the user by login.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
-    }*/
+    }
 }
