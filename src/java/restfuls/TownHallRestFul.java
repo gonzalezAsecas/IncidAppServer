@@ -126,12 +126,12 @@ public class TownHallRestFul{
     public TownHallBean findbyName(@PathParam("locality") String name) {
         TownHallBean th = null;
         try {
-            LOGGER.info("TownHallRestFul: Finding a town hall by id.");
+            LOGGER.info("TownHallRestFul: Finding a town hall by name.");
             th = townhallejb.findTownHallbyName(name);
-            LOGGER.info("TownHallRestFul: Town hall found by id.");
+            LOGGER.info("TownHallRestFul: Town hall found by name.");
             return th;
         } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding the town hall by id.", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TownHallRestFul: Exception finding the town hall by name.", ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
     }

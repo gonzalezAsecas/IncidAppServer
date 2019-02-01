@@ -286,7 +286,7 @@ public class UserEJB implements UserLocal{
             //passwordBytes = DatatypeConverter.parseHexBinary(new String(password));
             LOGGER.info("UserEJB: Decrypting the password.");
             //Open the stream for read the private key
-            fis= new FileInputStream("private.key");
+            fis= new FileInputStream(properties.getString("private_key"));
             //set the size of the byte array regard to the key
             key = new byte[fis.available()];
             //read the file
@@ -387,7 +387,7 @@ public class UserEJB implements UserLocal{
         try{
             email = new SimpleEmail();
             //set the hostname
-            email.setHostName("smtp.googlemail.com");
+            email.setHostName(properties.getString("hostName"));
             //set the port
             email.setSmtpPort(Integer.parseInt(properties.getString("emailPort")));
             //set the email and the password for authentication
