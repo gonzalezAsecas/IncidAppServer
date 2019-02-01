@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -55,9 +56,9 @@ public class IncidentBean implements Serializable{
     private Estate estate;
     @ManyToOne
     private UserBean user;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private LocationBean location;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private TypeBean type;
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="signature", catalog="incidapp")

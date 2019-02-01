@@ -44,6 +44,7 @@ public class IncidentEJB implements IncidentLocal{
     public void createIncident(IncidentBean incident) throws CreateException {
         try{
             LOGGER.info("IncidentEJB: Adding a incident.");
+            incident.setId(null);
             em.persist(incident);
             LOGGER.info("IncidentEJB: incident added.");
         }catch(Exception e){
