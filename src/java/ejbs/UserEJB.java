@@ -252,9 +252,12 @@ public class UserEJB implements UserLocal{
                     newPassword+=symbols[random.nextInt(symbols.length)];
                 }
                 //send the email
-                sendEmail(this.decryptData("email.data"),
-                        this.decryptData("pwd.data"),
+                sendEmail(this.decryptData(properties.getString("email")),
+                        this.decryptData(properties.getString("email_pwd")),
                         us.getEmail(), newPassword, true);
+                /*sendEmail(this.decryptData("email.data"),
+                        this.decryptData("pwd.data"),
+                        us.getEmail(), newPassword, true);*/
                 //save the password hashing it
                 us.setPassword(hashPassword(newPassword.getBytes()));
                 //save the modified user
