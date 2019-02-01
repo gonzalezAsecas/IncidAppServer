@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -199,21 +198,21 @@ public class UserBean implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.id);
-        hash = 89 * hash + Objects.hashCode(this.login);
-        hash = 89 * hash + Objects.hashCode(this.email);
-        hash = 89 * hash + Arrays.hashCode(this.password);
-        hash = 89 * hash + Objects.hashCode(this.fullName);
-        hash = 89 * hash + Objects.hashCode(this.status);
-        hash = 89 * hash + Objects.hashCode(this.privilege);
-        hash = 89 * hash + Objects.hashCode(this.lastAccess);
-        hash = 89 * hash + Objects.hashCode(this.lastPasswordChange);
-        hash = 89 * hash + Objects.hashCode(this.dni);
-        hash = 89 * hash + Objects.hashCode(this.street);
-        hash = 89 * hash + Objects.hashCode(this.th);
-        hash = 89 * hash + Objects.hashCode(this.incidents);
-        hash = 89 * hash + Objects.hashCode(this.signatureIncidents);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.login);
+        hash = 37 * hash + Objects.hashCode(this.email);
+        hash = 37 * hash + Objects.hashCode(this.password);
+        hash = 37 * hash + Objects.hashCode(this.fullName);
+        hash = 37 * hash + Objects.hashCode(this.status);
+        hash = 37 * hash + Objects.hashCode(this.privilege);
+        hash = 37 * hash + Objects.hashCode(this.lastAccess);
+        hash = 37 * hash + Objects.hashCode(this.lastPasswordChange);
+        hash = 37 * hash + Objects.hashCode(this.dni);
+        hash = 37 * hash + Objects.hashCode(this.street);
+        hash = 37 * hash + Objects.hashCode(this.th);
+        hash = 37 * hash + Objects.hashCode(this.incidents);
+        hash = 37 * hash + Objects.hashCode(this.signatureIncidents);
         return hash;
     }
 
@@ -235,6 +234,9 @@ public class UserBean implements Serializable {
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
         if (!Objects.equals(this.fullName, other.fullName)) {
             return false;
         }
@@ -245,9 +247,6 @@ public class UserBean implements Serializable {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Arrays.equals(this.password, other.password)) {
             return false;
         }
         if (this.status != other.status) {

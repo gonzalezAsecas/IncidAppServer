@@ -113,6 +113,6 @@ public class TypeBean implements Serializable{
 
     @Override
     public String toString() {
-        return name;
+        return "TypeBean{" + "id=" + id + ", name=" + name + ", severity=" + severity + ", incidents=" + incidents + '}';
     }
 }
