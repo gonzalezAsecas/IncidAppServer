@@ -6,6 +6,7 @@
 package ejbs;
 
 import entities.TownHallBean;
+import entities.UserBean;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.ReadException;
@@ -84,6 +85,10 @@ public class TownHallEJB implements TownHallLocal{
     public void removeTownHall(TownHallBean townhall) throws DeleteException {
         try{
             LOGGER.info("TownHallEJB: Removing a town hall.");
+            List<UserBean> users = townhall.getUsers();
+            for (UserBean user : users){
+                user.setTH(null);
+            }
             em.remove(em.merge(townhall));
             LOGGER.info("TownHallEJB: Town hall removed.");
         }catch(Exception e){
@@ -126,6 +131,7 @@ public class TownHallEJB implements TownHallLocal{
             return townHall;
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "TownHallEJB: Exception finding the town hall by name.", e.getMessage());
+            e.printStackTrace();
             throw new ReadException(e.getMessage());
         }
     }
