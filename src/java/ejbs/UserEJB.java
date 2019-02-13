@@ -44,6 +44,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
@@ -252,8 +253,8 @@ public class UserEJB implements UserLocal{
                     newPassword+=symbols[random.nextInt(symbols.length)];
                 }
                 //send the email
-                sendEmail(this.decryptData(properties.getString("email")),
-                        this.decryptData(properties.getString("email_pwd")),
+                sendEmail(""/*this.decryptData(properties.getString("email"))*/,
+                        ""/*this.decryptData(properties.getString("email_pwd"))*/,
                         us.getEmail(), newPassword, true);
                 /*sendEmail(this.decryptData("email.data"),
                         this.decryptData("pwd.data"),
@@ -369,7 +370,7 @@ public class UserEJB implements UserLocal{
             fis.close();
             return data;
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | IOException | ClassNotFoundException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException ex) {
-            LOGGER.log(Level.SEVERE, "", ex);
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             throw new Exception(ex);
         }
     }
@@ -390,12 +391,14 @@ public class UserEJB implements UserLocal{
             email.setHostName(properties.getString("hostName"));
             //set the port
             email.setSmtpPort(Integer.parseInt(properties.getString("emailPort")));
+            email.setSslSmtpPort(properties.getString("emailPort"));
+            email.setSSLOnConnect(true);
             //set the email and the password for authentication
-            email.setAuthentication(path, password);
+            email.setAuthenticator(new DefaultAuthenticator("incidApp@gmail.com", "abcd*1234"));
             //set TLS enabled
             email.setStartTLSEnabled(true);
             //set the name of the sent email
-            email.setFrom(path);
+            email.setFrom("incidApp@gmail.com");
             //set a subject
             email.setSubject("IncidApp: Your password have changed");
             //set the mesage
@@ -409,7 +412,7 @@ public class UserEJB implements UserLocal{
             //send the email
             email.send();
        }catch(EmailException ex){
-            LOGGER.log(Level.SEVERE, "", ex);
+            LOGGER.log(Level.SEVERE, "UserEJB: Email with an exception.", ex);
             throw new Exception(ex);
         }
     }
